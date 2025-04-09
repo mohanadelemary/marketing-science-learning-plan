@@ -33,3 +33,18 @@
 ## 🔗 Resources
 
 - [ ] Add articles, blogs, papers, videos, or documentation here.
+
+
+
+
+### 🔍 Common Tests Behind Causal Inference Techniques
+
+| Method                        | What's Actually Tested                              | Under-the-Hood Test              |
+|------------------------------|------------------------------------------------------|----------------------------------|
+| **A/B Testing (RCT)**        | Mean difference between groups                      | **t-test** or **z-test**         |
+| **Difference-in-Differences**| Pre-post changes across groups                      | **Regression + t-test**          |
+| **Regression Analysis**      | Coefficient of treatment variable ≠ 0               | **t-test on β coefficient**      |
+| **Propensity Score Matching**| Mean outcome difference post-matching               | **t-test** / **non-parametric**  |
+| **Instrumental Variables**   | Effect of instrument on outcome (2SLS)              | **t-test** on 2SLS regression    |
+| **CausalImpact**             | Post-treatment deviation from expected trend        | **Bayesian posterior test**      |
+| **Uplift Modeling**          | Differential treatment effect per individual        | **Model-based; may test uplift > 0** |

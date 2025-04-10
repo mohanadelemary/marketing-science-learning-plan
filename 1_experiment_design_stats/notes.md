@@ -52,13 +52,31 @@ T-Test
 
 ANOVA
 - Basically like T-test when you have more than two samples
-- ONE WAY ANOVA is like an independent two sample t-test. one measurement across samples at one moment in time
-- TWO WAY ANOVA is like a paired t-test. Measure samples at two times before and after a treatment and analyze the mean difference sample
-- samples data should be normally distributed (if not, use Kruskal-Wallis-Test) and similar variance across samples (if not, use Welch-ANOVA).
-- To calculate ANOVA: You calculate the F-statistic (variance among groups/variance within groups). Then using the assigned p-value and degrees of freedom, you extract the f-critical value. If your F-statistic is higher than F-critical, you reject the null and accept alternative.
+- ONE WAY ANOVA is like an independent two sample t-test. one measurement across samples at one moment in time. It examines the effect of one independent categorical variable on a continuous variable.
+- TWO WAY ANOVA is like one way but tests the effect of two categorical independent varaibles on a continuous salary (effect on salary due to age and gender). it also evaluates the impact of the interaction of the two categorical variables.
+- Repeated measures ANOVA: it's like a paired t-test. Measure samples at three or more times times before and after a treatment and analyze the mean difference sample. Here samples are dependent (e.g. heart rate before workout, right after workour, 2hours after workout)
+- samples data for one-way anova should be normally distributed (if not, use Kruskal-Wallis-Test) and similar variance across samples (if not, use Welch-ANOVA). for other non-normal or diff-variance anova subtypes of tests, other test alternative might apply.
+- one and two way anova should have homogenity of distribution and variance. In addition for repeat measure anova, homogenity of covariance is needed (sphericity), maunchly's test is used to evaluate that. also no significant outliers.
+- Mixed-Model ANOVA: analyses data within-subject factor (repeat measure), between subject-factor(one way/two way) and ther interaction between all factors.
+
+- To calculate ANOVA: You calculate the F-statistic (variance among groups/variance within groups). Then using the assigned p-value and degrees of freedom, you extract the f-critical value. If your F-statistic is higher than F-critical, you reject the null and accept alternative. This only shows if there are statistical difference across and within samples. Post-hoc tests are used to quantify the differences due to independent factors and interactions of multiple factors (effect size tests)
 
 
+Parametric and Non-parametric Tests
 
+- Parametric Tests are used when your sample data is normally distributed. if it's not, you should then use non-parametric tests.
+- Para Tests run the analysis on the raw numerical data. Non-parametric tests usually rank the numerical values, use that to create normal distributions then run the analyses. Examples of parametric tests and their non-parametric test equivalents below:
+
+### 📊 Parametric vs Nonparametric Tests
+
+| Test Type                          | Parametric Test                     | Nonparametric Test               |
+|-----------------------------------|-------------------------------------|----------------------------------|
+| **One Sample**                    | Simple t-Test                       | Wilcoxon test for one sample     |
+| **Two Dependent Samples**         | Paired Sample t-Test                | Wilcoxon Test                    |
+| **Two Independent Samples**       | Unpaired Sample t-Test              | Mann–Whitney U Test              |
+| **>2 Independent Samples**        | One-way (Factorial) ANOVA           | Kruskal–Wallis Test              |
+| **>2 Dependent Samples**          | Repeated Measures ANOVA             | Friedman Test                    |
+| **Correlation Between Variables** | Pearson Correlation                 | Spearman's Rank Correlation      |
 
 
 

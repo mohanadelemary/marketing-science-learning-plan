@@ -69,7 +69,7 @@ Parametric and Non-parametric Tests
 
 ### 📊 Parametric vs Nonparametric Tests
 
-| Test Type                          | Parametric Test                     | Nonparametric Test               |
+| Test Type                          | Parametric Test                     | Nonparametric Test               | 
 |-----------------------------------|-------------------------------------|----------------------------------|
 | **One Sample**                    | Simple t-Test                       | Wilcoxon test for one sample     |
 | **Two Dependent Samples**         | Paired Sample t-Test                | Wilcoxon Test                    |

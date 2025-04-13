@@ -81,8 +81,24 @@ Parametric and Non-parametric Tests
 
 
 
+Testing for Data Normality
+1. Analytical Testing:
+   - Kolmogorov-Smirnove Test (used to test other distribution types as well)
+   - Shapiro-Wilk Test
+   - Anderson-Darson (used to test other distribution types as well)
+Null Hypothesis: Data fits normal distribution, if p less than 0.05, reject null, non-normal distribution. p greater, fail to reject and assume normal distribution.
+
+Problems with analytical tests: p-value depends on sample size. small samples mostly yield on-representative large values. Therefore graphical tests are more frequently used.
+
+3. Graphical Test:
+- Normal histogram plotting to visually detect a bell curve
+- Quantile-Quantie Plot: Normally distributed data points wold follow the disagonal line plotted as reference. non-normal would typical form an S-shape instead
 
 
+Testing for Equality of Variance across data samples/groups
+* Levene's Test
+* Null hypothesis: Equal variance across groups
+* You calculate the L-statistic(which is equal to the F-statistic) and extract the corresponding p-value. p-value less than 0.05, reject the null and variance across groups is not equal (then you cant use a t-test for example which requires homegenity of variance)
 
 
 

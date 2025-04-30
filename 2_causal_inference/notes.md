@@ -50,6 +50,7 @@
 | **Uplift Modeling**          | Differential treatment effect per individual        | **Model-based; may test uplift > 0** |
 
 
+____________________________________________________________________________________________________________________________________
 
 
 

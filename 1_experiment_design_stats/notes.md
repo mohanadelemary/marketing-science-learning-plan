@@ -10,6 +10,8 @@
     - Usual structure/breakdown of data collected for tests and to calculate required size
     - Understand Parametric vs. non-parametric t-tests
     - Understand test alternatives for non-equal sample size split like Welch's T-test.
+    - How data should be structured to ingest and run the tests. time-series, user-level, aggregations?
+    - Code for each test? manual coding? prebuilt function on statsmodels or other?
       
 - **A/B Testing Design**
     - Frequentist and Bayesian A/B testing
@@ -53,7 +55,7 @@ T-Test
 ANOVA
 - Basically like T-test when you have more than two samples
 - ONE WAY ANOVA is like an independent two sample t-test. one measurement across samples at one moment in time. It examines the effect of one independent categorical variable on a continuous variable.
-- TWO WAY ANOVA is like one way but tests the effect of two categorical independent varaibles on a continuous salary (effect on salary due to age and gender). it also evaluates the impact of the interaction of the two categorical variables.
+- TWO WAY ANOVA is like one way but tests the effect of two categorical independent variables on a continuous variable (effect on salary due to age and gender). it also evaluates the impact of the interaction of the two categorical variables.
 - Repeated measures ANOVA: it's like a paired t-test. Measure samples at three or more times times before and after a treatment and analyze the mean difference sample. Here samples are dependent (e.g. heart rate before workout, right after workour, 2hours after workout)
 - samples data for one-way anova should be normally distributed (if not, use Kruskal-Wallis-Test) and similar variance across samples (if not, use Welch-ANOVA). for other non-normal or diff-variance anova subtypes of tests, other test alternative might apply.
 - one and two way anova should have homogenity of distribution and variance. In addition for repeat measure anova, homogenity of covariance is needed (sphericity), maunchly's test is used to evaluate that. also no significant outliers.
@@ -88,7 +90,7 @@ Testing for Data Normality
    - Anderson-Darson (used to test other distribution types as well)
 Null Hypothesis: Data fits normal distribution, if p less than 0.05, reject null, non-normal distribution. p greater, fail to reject and assume normal distribution.
 
-Problems with analytical tests: p-value depends on sample size. small samples mostly yield on-representative large values. Therefore graphical tests are more frequently used.
+Problems with analytical tests: p-value depends on sample size. small samples mostly yield non-representative large values. Therefore graphical tests are more frequently used.
 
 3. Graphical Test:
 - Normal histogram plotting to visually detect a bell curve
@@ -98,11 +100,75 @@ Problems with analytical tests: p-value depends on sample size. small samples mo
 Testing for Equality of Variance across data samples/groups
 * Levene's Test
 * Null hypothesis: Equal variance across groups
-* You calculate the L-statistic(which is equal to the F-statistic) and extract the corresponding p-value. p-value less than 0.05, reject the null and variance across groups is not equal (then you cant use a t-test for example which requires homegenity of variance)
+* You calculate the L-statistic(which is equal to the F-statistic) and extract the corresponding p-value. p-value less than 0.05, reject the null and variance across groups is not equal (then you cant use a t-test for example which requires homegenity of variance).
+* if it was a t-test,m you can then use t test for samples with different variance
+
+Mann-Whitney U-Test
+* Non-parametric equivalent of a independent samples t-test
+* Instead of comparing sample means like in t-test, MW U-test calculates rank sums and compares that.
+* Null: no sig. diff in ranks sums, Alt: sig. diff.
+* Calc. U-values then z-value, look that up against z-critical to determine p-value
+
+Wilcoxon-Test
+* Non-parametric equivalent of a dependent samples t-test (same sample measured before and after treatment)
+* Calculate rank sums based on cross-sample differences and determine W-Statistic, then z-value, then p-value
+
+Kruskal-Wallis-Test
+* Non-parametric equivalent of a one-way ANOVA
+* Calc. diff in rank sums
+
+Friedman Test
+
+*  Non-parametric equivalent of a repeated measures ANOVA (dependent samples)
 
 
+----------------------------------------------------------
+
+Chi-square test
+* for nominal categorical variables, to see if there is a relationship between categorical variables (e.g. relationship between gender and favourite newspaper)
+* Assumptions:
+  - Expected frequencies per cell is greater than 5
+  - account for different nominal categories without ordinal values or ranks (like categories of education (high school, Bsc, Msc, Phd). for rank copnsideration try spearman correlation, Mann-Whitney U-Test or Kruskal-Wallis-Test
+  - Null: no relationship between variable, Alt: relationship
+  - calculate chi-sq values, compare to critical chi-sq value and determine significance
+    
+
+----------------------------------------------------------
+Correlation:
+
+- Goal is to determine strength and direction of correlation (usually a value between -1 to 1)
+
+Pearson Correlation Coefficient (r)
+* Null: no corr, alt:corr
+* r tells us the corr, running a t-test tells us if r is significantly different from zero.
+* Assumptions:
+  - Only works on metric variables
+  - only detects linear relationships, non-linear relationships won't be detected
+  - If we're using r to test a hypothesis (corr. is statistically significant larger than zero, the two variables must be normally distributed.
 
 
+Spearman Correlation Coefficient (rs)
+* non-parametric equivalent of pearson correlation coeff (assign ranks rather than raw numbers).
+* Spearman is equal to pearson when done on ranks.
+
+Kendall's tau
+* Non-parametric equivalent of pearson correlation and variables need to only have ordinal scale levels (numerical or ordinal but not nominal)
+* Exactly the same as spearman but should be preferred over spearman if very few data with many rank ties available
+
+Point-Biserial Correlation Coefficient (rpb)
+* A special case of pearson correlation. Examines relationship between dichotomous variable and a metric variable.
+* Dichtomous variable is a nominal one with two values (gender M/F, smoking Y/N, etc.), metric varibale is like age, weight, salary
+* provides same p-value as an independent t-test
+* to test statistical significance of this correlation, metric variable must be normally distributed, otherwise t-value and p-value can't be reliably interpreted.
+
+Conditions to prove Causality
+1. Strong and statistically signifcant correlation coefficient
+2. Proof of sequence, this can be done in 3 ways:
+   a. chronological sequence of events (variable A then B) so variable B results happened after variable A happened.
+   b. A controlled experiment in which the two variables can specifically influenced
+   c. Strong Theory on how the direction of the relationship goes.
+   
+   
 
 
 

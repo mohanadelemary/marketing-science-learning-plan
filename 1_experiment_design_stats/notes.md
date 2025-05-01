@@ -171,6 +171,38 @@ Conditions to prove Causality
 
 Regression
 
+**Simple Linear Regression**
+
+Assumptions in SLR to be checked before interpreting the regression results
+
+1. Relationship can be fitted by a straight line
+2. Independence of errors. the error between real and predicted values for one value doesnt's influence the error for others
+3. Homoscedasticity: If resdiuals are plotted on a y-axis along the predicted values on x-axis, they should be evenly distributed across the plane and not for exampleincrease as the predicted values on the x-axis increase like a funnel shape (heteroscedasdticity)
+4. Errors follow a normal distribution (analytical normality tests or Q-Q plots)
+
+**Multi Linear Regression**
+
+Assumptions in MLR to be checked before interpreting the regression results
+- The four assumptions in SLR Plus one more:
+- No Multi-Collinearity: MC is when two or more predictor variables are highly correlated. hard to assign weights due to info overlap.
+- MC is not a massive issue if we just want to predict with the model, but it is if the goal is interpret the influence of predictor variables.
+- We determine the R-squared value for each predictor variable. High r-sq. means the variable's variance is higly explained by the other predictor variables.
+- For there, we calculate Tolerance and VIF for the variables.
+- Treatment of MC: consider removing high MC variable or combining variables.
+
+MLR summary
+
+- Unstandardized coefficient per variable are what's used in the equation but handles multiple units of variables
+- Standardized coefficients are standardization giving a more standardized and fair way to evaluate the influence and importance of each variable in the regression.
+- R = Correlation
+- R-Squared = shows how well is the variance in the predicted value explained by model
+- Adjusted R-Squared = Accounts for the number of independent variables in the model. a more accurate measure of explanatory power. if model has too many predictors - regular r-sq could overestimate the power, therefore adjusted r-sq. is then recommended.
+- Standard error: average distance between line and observed data
+- 
+
+Dummy Variables:
+
+- If you one-hot encode categories, you drop one of the new variables and use as reference only
 
 
    

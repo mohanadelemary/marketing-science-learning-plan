@@ -167,7 +167,12 @@ Conditions to prove Causality
    a. chronological sequence of events (variable A then B) so variable B results happened after variable A happened.
    b. A controlled experiment in which the two variables can specifically influenced
    c. Strong Theory on how the direction of the relationship goes.
-   
+
+
+Regression
+
+
+
    
 
 

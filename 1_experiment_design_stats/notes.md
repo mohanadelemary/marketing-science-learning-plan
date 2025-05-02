@@ -262,6 +262,10 @@ Kaplan Meier Curve
 - Example at t 5years, survival rate is 0.7. which means at t5, there's a 70% chance events hasn't occured yet.
 - Kaplan Meier Curves Do censoring for data (very unique): Where it partially accounts for events that happen before or after the observation time period, unlike a regression model which would just ignore the data point.
 
+
+Two tests for testing effect on KM curves
+- Log rank to see if there's a diff in KM curver when changing a variale across two camples. cox regression if you're also testing for influence of more variables
+
 🔍 Key Differences Between Log-Rank Test and Cox Regression
 
 Feature	Log-Rank Test	Cox Proportional Hazards Regression

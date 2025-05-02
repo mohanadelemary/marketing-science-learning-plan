@@ -173,6 +173,8 @@ Regression
 
 **Simple Linear Regression**
 
+- Linear equation that you solve for by minimizing the MSE or others like ASE
+
 Assumptions in SLR to be checked before interpreting the regression results
 
 1. Relationship can be fitted by a straight line
@@ -204,9 +206,97 @@ Dummy Variables:
 
 - If you one-hot encode categories, you drop one of the new variables and use as reference only
 
+________________________________________________
 
+Logistic Regression
+
+- To classify data rows into binary outputs (0 and 1)
+
+- For this we use the logistic function that outputs values between zero and one.
+- You solve for it using maximum likelihood estimation.
+- Outputs probability of an event between 0 and 1. based on the threshold you define (usually 0.5) you can make a prediction.
+- You get coefficients and p-values
+- You test for statistical significance by wald's z-test or chi-squared (unlike t-statistic for lin reg)
+- You also get r2 values from multiple variations to determine if the model explains the variablitiy in the predicted variable.
+
+________________________________________________
    
+Confidence Intervals (Freq.) and Credible Interval (Bayesian)
+
+Right way to define confidence level of 95%: If we keep getting samples, we know that 95% of the samples extracted will contain the population mean
+______________________
+
+DOE like full factorial and fractional factorial design
+also power analysis and sample size and minimum effect required
+
+________________________________________________
+
+Survival Time Analysis
+
+Statistical analyses concerned with analyzing how much time runs out until a certain event takes place.
+
+Example: analyzing how a person dies after being diagnosed by a disease, or time to retunr to work afterburnout leave.
 
 
+Goals of survival analysis:
+
+1. Estimate time until an event occurs (e.g. churn, failure, death) (what is robability of event X at time t)
+2. Handle censored data (subjects that haven’t experienced the event yet)
+3. Compare time-to-event across groups (e.g. treatment vs. control)
+4. Model the effect of variables on event timing (via hazard rates)
+5. Calculate survival probabilities over time 
+𝑆
+(
+𝑡
+)
+S(t)
+6. Identify risk factors influencing event likelihood (Cox regression)
 
 
+3 Main things to know: Kaplan Meier Curve, Log Rank Test, Cox Regression
+
+Kaplan Meier Curve
+
+- time on x-axis
+- survival rate on y-axis (1 at top, 0 at bottom)
+- Example at t 5years, survival rate is 0.7. which means at t5, there's a 70% chance events hasn't occured yet.
+- Kaplan Meier Curves Do censoring for data (very unique): Where it partially accounts for events that happen before or after the observation time period, unlike a regression model which would just ignore the data point.
+
+🔍 Key Differences Between Log-Rank Test and Cox Regression
+
+Feature	Log-Rank Test	Cox Proportional Hazards Regression
+Goal	Test if two or more survival curves are significantly different	Estimate the effect of covariates (like age, channel) on survival time
+Type of test	Non-parametric (no assumptions about the shape of survival curves)	Semi-parametric (assumes proportional hazards)
+Input	Group/category (e.g. Group A vs. Group B)	Continuous or categorical predictors
+Output	A p-value (tests for difference between groups)	Hazard ratios + coefficients for each variable
+Adjust for covariates?	❌ No	✅ Yes
+Effect size?	❌ No — tells if curves differ, not by how much	✅ Yes — tells how much each variable increases/decreases hazard
+Assumes proportional hazards?	✅ Yes	✅ Yes
+Visual companion	Kaplan-Meier curves	Can also be plotted as survival curves by covariate
+🧠 Summary in Plain Terms:
+🧪 Log-Rank Test:
+Used when comparing two or more survival curves
+
+Answers: "Are the survival experiences in these groups statistically different?"
+
+No control for other variables
+
+📈 Cox Regression:
+Used when modeling how multiple variables affect survival
+
+Answers: "How does each variable (e.g. age, ad channel, platform) impact the risk of event over time?"
+
+Adjusts for multiple covariates and gives hazard ratios (interpretable effect sizes)
+
+✅ When to Use:
+Use Log-Rank Test for:
+
+A/B test-style comparisons
+
+Simple group comparisons (e.g., churn rate by user group)
+
+Use Cox Regression for:
+
+Real-world modeling with multiple influencing factors
+
+Need for interpretation (how much faster/slower people churn, die, convert, etc.)

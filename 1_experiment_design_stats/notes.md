@@ -132,7 +132,12 @@ Chi-square test
   - Null: no relationship between variable, Alt: relationship
   - calculate chi-sq values, compare to critical chi-sq value and determine significance
     
+----------------------------------------------------------
 
+Effect Size
+
+- Basically indicates how strong an observed effect is. Depending on the test you're running, the effect could be the strength of a difference or correlation.
+- cohen's d for effect size with t-test (0 to 1)
 ----------------------------------------------------------
 Correlation:
 
@@ -167,8 +172,120 @@ Conditions to prove Causality
    a. chronological sequence of events (variable A then B) so variable B results happened after variable A happened.
    b. A controlled experiment in which the two variables can specifically influenced
    c. Strong Theory on how the direction of the relationship goes.
+___________________________________________
+📊 Power Analysis – Key Concepts (A/B Testing)
+Goal: Estimate how much data you need to detect a meaningful effect with confidence
 
+Power = 
+1
+−
+𝛽
+1−β: Probability of detecting a real effect (usually set to 0.8 = 80%)
 
+α (Type I error): Risk of a false positive (commonly 0.05)
+
+β (Type II error): Risk of a false negative (commonly 0.2)
+→ Power is directly tied to Type II error
+
+📏 Inputs for Sample Size Calculation
+Baseline rate (e.g. 10% conversion)
+
+MDE (e.g. +2% absolute = 12%)
+
+α = 0.05 (significance level)
+
+Power = 0.8
+
+🧮 Formula (Per Group):
+𝑛
+=
+2
+⋅
+(
+𝑍
+1
+−
+𝛼
+/
+2
++
+𝑍
+1
+−
+𝛽
+)
+2
+⋅
+𝑝
+ˉ
+(
+1
+−
+𝑝
+ˉ
+)
+(
+𝑝
+1
+−
+𝑝
+2
+)
+2
+n= 
+(p 
+1
+​
+ −p 
+2
+​
+ ) 
+2
+ 
+2⋅(Z 
+1−α/2
+​
+ +Z 
+1−β
+​
+ ) 
+2
+ ⋅ 
+p
+ˉ
+​
+ (1− 
+p
+ˉ
+​
+ )
+​
+ 
+Resulting 
+𝑛
+n is the required sample size per group (not total)
+
+Multiply by 2 to get total sample size for both control and variant
+
+🔁 Error Balance & Trade-Offs
+| Lower α (Type I error) | ➖ Fewer false positives<br>➕ Need more data |
+| Lower β (higher power) | ➖ Fewer false negatives<br>➕ Need more data |
+| Smaller MDE | ➕ Detect subtle effects<br>➖ Much larger sample required |
+
+✅ TL;DR
+Sample size is per group
+
+Based on balancing:
+
+Type I error (false positive) tolerance
+
+Type II error (false negative) tolerance (via power)
+
+The smallest effect you care about detecting (MDE)
+
+Ensures test is neither underpowered (miss real effects) nor wasteful
+
+___________________________________________
 Regression
 
 **Simple Linear Regression**
@@ -304,3 +421,33 @@ Use Cox Regression for:
 Real-world modeling with multiple influencing factors
 
 Need for interpretation (how much faster/slower people churn, die, convert, etc.)
+
+
+---------------------------------------------------------------------------------------------
+
+
+**📊 Control Chart – Key Points**
+Purpose: Monitor process stability over time
+Used for: Detecting unusual variation (signal vs. noise)
+Tracks: Metric over time (e.g. conversion rate, ROAS, defects)
+
+📐 Components
+- Center Line (CL): Process average
+- UCL / LCL: Control limits = mean ± 3 standard deviations
+- X-axis: Time or sequence
+- Y-axis: Metric value
+
+✅ In-Control Process
+- Points vary randomly within limits
+- No clear trends or patterns
+
+❌ Out-of-Control Signals
+- Point outside UCL/LCL
+- Sudden shifts or trends
+- Repeated points near limits
+
+🧪 Common Use Cases
+- Marketing: Monitor ROAS, CTR, bounce rate
+- Product: Funnel drop-off, error rates
+- Manufacturing: Defect tracking
+- Support: Call durations, wait times

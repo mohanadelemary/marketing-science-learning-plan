@@ -1,143 +1,4 @@
-# **1. Core Statistics & Experimentation Design**
 
-
-- **Statistical Testing**
-    - T-tests (independent, paired), ANOVA
-    - Chi-Square (goodness of fit & independence)
-    - Confidence intervals, p-values, effect sizes
-    - Power analysis & sample size estimation
-    - Hypothesis testing
-    - Usual structure/breakdown of data collected for tests and to calculate required size
-    - Understand Parametric vs. non-parametric t-tests
-    - Understand test alternatives for non-equal sample size split like Welch's T-test.
-    - How data should be structured to ingest and run the tests. time-series, user-level, aggregations?
-    - Code for each test? manual coding? prebuilt function on statsmodels or other?
-      
-- **A/B Testing Design**
-    - Frequentist and Bayesian A/B testing
-    - Sequential Testing, FDR correction
-    - Confidence vs credible intervals
-      
-- **Geo Experiments & Geo Lift Analysis** ✅
-    - Aggregate geo-based A/B tests
-    - Pre/post trends and control-matching for regions
-    - Applications for brand/media testing
-
-### 🧰 Libraries:
-
-- `scipy.stats`
-- `statsmodels.stats.api` (for t-tests, ANOVA, power analysis)
-- `pingouin` (for effect sizes, CI)
-- `bayespy`, `PyMC`, `pymc3` (for Bayesian A/B testing)
-- `GeoLift` (R package; similar analysis can be replicated in Python)
-- `pandas`, `numpy`, `matplotlib`, `seaborn`, `plotly` (for exploratory & visual analysis)
-
-## 📓 Notes & Summaries
-
-- [ ] Add theoretical explanations, formulas, and insights here.
-
-## 🔗 Resources
-
-- [ ] Add articles, blogs, papers, videos, or documentation here.
-
-- [ ] https://www.youtube.com/watch?v=K9teElePNkk
-
-T-Test
--     1. One sample t-test: to see if a sample mean value is significantly different from the mean reference value
--     2. Independent Samples t-test: compare significant difference between the mean value of two independent samples (two drugs, campaigns,etc.)
--     3. Paired Samples t-test: Compare means of two dependent groups where you compare the difference before and after treatment (compare mean weight of sample before and after diet)
-
-- * t-test samples must be of normal distribution (test for normal distribution, else use non-parametric t-test like Mann–Whitney U test which tests medians rather than means)
-  * In an independent two sample t-test, samples must be equal variance (test equal variance with levene's test)
-  * t-test hypotheses: Null is that there is no difference, Alt is that samples are not equal/there is significant difference.
-  * t-test is calculated by first getting the t-statistic (diff. in mean values / standard deviation (error)). then getting t-critical value from the t-value table by looking up the assigned p-value and sample's degrees of freedom. If our t-statistic is higher than the t-critical value, we reject the null and accept the alternative hypothesis. 
-
-ANOVA
-- Basically like T-test when you have more than two samples
-- ONE WAY ANOVA is like an independent two sample t-test. one measurement across samples at one moment in time. It examines the effect of one independent categorical variable on a continuous variable.
-- TWO WAY ANOVA is like one way but tests the effect of two categorical independent variables on a continuous variable (effect on salary due to age and gender). it also evaluates the impact of the interaction of the two categorical variables.
-- Repeated measures ANOVA: it's like a paired t-test. Measure samples at three or more times times before and after a treatment and analyze the mean difference sample. Here samples are dependent (e.g. heart rate before workout, right after workour, 2hours after workout)
-- samples data for one-way anova should be normally distributed (if not, use Kruskal-Wallis-Test) and similar variance across samples (if not, use Welch-ANOVA). for other non-normal or diff-variance anova subtypes of tests, other test alternative might apply.
-- one and two way anova should have homogenity of distribution and variance. In addition for repeat measure anova, homogenity of covariance is needed (sphericity), maunchly's test is used to evaluate that. also no significant outliers.
-- Mixed-Model ANOVA: analyses data within-subject factor (repeat measure), between subject-factor(one way/two way) and ther interaction between all factors.
-
-- To calculate ANOVA: You calculate the F-statistic (variance among groups/variance within groups). Then using the assigned p-value and degrees of freedom, you extract the f-critical value. If your F-statistic is higher than F-critical, you reject the null and accept alternative. This only shows if there are statistical difference across and within samples. Post-hoc tests are used to quantify the differences due to independent factors and interactions of multiple factors (effect size tests)
-
-
-Parametric and Non-parametric Tests
-
-- Parametric Tests are used when your sample data is normally distributed. if it's not, you should then use non-parametric tests.
-- Para Tests run the analysis on the raw numerical data. Non-parametric tests usually rank the numerical values, use that to create normal distributions then run the analyses. Examples of parametric tests and their non-parametric test equivalents below:
-
-### 📊 Parametric vs Nonparametric Tests
-
-| Test Type                          | Parametric Test                     | Nonparametric Test               | 
-|-----------------------------------|-------------------------------------|----------------------------------|
-| **One Sample**                    | Simple t-Test                       | Wilcoxon test for one sample     |
-| **Two Dependent Samples**         | Paired Sample t-Test                | Wilcoxon Test                    |
-| **Two Independent Samples**       | Unpaired Sample t-Test              | Mann–Whitney U Test              |
-| **>2 Independent Samples**        | One-way (Factorial) ANOVA           | Kruskal–Wallis Test              |
-| **>2 Dependent Samples**          | Repeated Measures ANOVA             | Friedman Test                    |
-| **Correlation Between Variables** | Pearson Correlation                 | Spearman's Rank Correlation      |
-
-
-
-
-Testing for Data Normality
-1. Analytical Testing:
-   - Kolmogorov-Smirnove Test (used to test other distribution types as well)
-   - Shapiro-Wilk Test
-   - Anderson-Darson (used to test other distribution types as well)
-Null Hypothesis: Data fits normal distribution, if p less than 0.05, reject null, non-normal distribution. p greater, fail to reject and assume normal distribution.
-
-Problems with analytical tests: p-value depends on sample size. small samples mostly yield non-representative large values. Therefore graphical tests are more frequently used.
-
-3. Graphical Test:
-- Normal histogram plotting to visually detect a bell curve
-- Quantile-Quantie Plot: Normally distributed data points wold follow the disagonal line plotted as reference. non-normal would typical form an S-shape instead
-
-
-Testing for Equality of Variance across data samples/groups
-* Levene's Test
-* Null hypothesis: Equal variance across groups
-* You calculate the L-statistic(which is equal to the F-statistic) and extract the corresponding p-value. p-value less than 0.05, reject the null and variance across groups is not equal (then you cant use a t-test for example which requires homegenity of variance).
-* if it was a t-test,m you can then use t test for samples with different variance
-
-Mann-Whitney U-Test
-* Non-parametric equivalent of a independent samples t-test
-* Instead of comparing sample means like in t-test, MW U-test calculates rank sums and compares that.
-* Null: no sig. diff in ranks sums, Alt: sig. diff.
-* Calc. U-values then z-value, look that up against z-critical to determine p-value
-
-Wilcoxon-Test
-* Non-parametric equivalent of a dependent samples t-test (same sample measured before and after treatment)
-* Calculate rank sums based on cross-sample differences and determine W-Statistic, then z-value, then p-value
-
-Kruskal-Wallis-Test
-* Non-parametric equivalent of a one-way ANOVA
-* Calc. diff in rank sums
-
-Friedman Test
-
-*  Non-parametric equivalent of a repeated measures ANOVA (dependent samples)
-
-
-----------------------------------------------------------
-
-Chi-square test
-* for nominal categorical variables, to see if there is a relationship between categorical variables (e.g. relationship between gender and favourite newspaper)
-* Assumptions:
-  - Expected frequencies per cell is greater than 5
-  - account for different nominal categories without ordinal values or ranks (like categories of education (high school, Bsc, Msc, Phd). for rank copnsideration try spearman correlation, Mann-Whitney U-Test or Kruskal-Wallis-Test
-  - Null: no relationship between variable, Alt: relationship
-  - calculate chi-sq values, compare to critical chi-sq value and determine significance
-    
-----------------------------------------------------------
-
-Effect Size
-
-- Basically indicates how strong an observed effect is. Depending on the test you're running, the effect could be the strength of a difference or correlation.
-- cohen's d for effect size with t-test (0 to 1)
 ----------------------------------------------------------
 Correlation:
 
@@ -173,117 +34,7 @@ Conditions to prove Causality
    b. A controlled experiment in which the two variables can specifically influenced
    c. Strong Theory on how the direction of the relationship goes.
 ___________________________________________
-📊 Power Analysis – Key Concepts (A/B Testing)
-Goal: Estimate how much data you need to detect a meaningful effect with confidence
 
-Power = 
-1
-−
-𝛽
-1−β: Probability of detecting a real effect (usually set to 0.8 = 80%)
-
-α (Type I error): Risk of a false positive (commonly 0.05)
-
-β (Type II error): Risk of a false negative (commonly 0.2)
-→ Power is directly tied to Type II error
-
-📏 Inputs for Sample Size Calculation
-Baseline rate (e.g. 10% conversion)
-
-MDE (e.g. +2% absolute = 12%)
-
-α = 0.05 (significance level)
-
-Power = 0.8
-
-🧮 Formula (Per Group):
-𝑛
-=
-2
-⋅
-(
-𝑍
-1
-−
-𝛼
-/
-2
-+
-𝑍
-1
-−
-𝛽
-)
-2
-⋅
-𝑝
-ˉ
-(
-1
-−
-𝑝
-ˉ
-)
-(
-𝑝
-1
-−
-𝑝
-2
-)
-2
-n= 
-(p 
-1
-​
- −p 
-2
-​
- ) 
-2
- 
-2⋅(Z 
-1−α/2
-​
- +Z 
-1−β
-​
- ) 
-2
- ⋅ 
-p
-ˉ
-​
- (1− 
-p
-ˉ
-​
- )
-​
- 
-Resulting 
-𝑛
-n is the required sample size per group (not total)
-
-Multiply by 2 to get total sample size for both control and variant
-
-🔁 Error Balance & Trade-Offs
-| Lower α (Type I error) | ➖ Fewer false positives<br>➕ Need more data |
-| Lower β (higher power) | ➖ Fewer false negatives<br>➕ Need more data |
-| Smaller MDE | ➕ Detect subtle effects<br>➖ Much larger sample required |
-
-✅ TL;DR
-Sample size is per group
-
-Based on balancing:
-
-Type I error (false positive) tolerance
-
-Type II error (false negative) tolerance (via power)
-
-The smallest effect you care about detecting (MDE)
-
-Ensures test is neither underpowered (miss real effects) nor wasteful
 
 ___________________________________________
 Regression
@@ -451,3 +202,322 @@ Tracks: Metric over time (e.g. conversion rate, ROAS, defects)
 - Product: Funnel drop-off, error rates
 - Manufacturing: Defect tracking
 - Support: Call durations, wait times
+
+
+__________________________________________________________________________________________________________________________________________________________________
+
+
+# **1. Core Statistics & Experimentation Design**
+
+## 📘 Index
+
+1. [Statistical Testing](#statistical-testing)  
+   1.1. [T-Tests](#t-tests)  
+   1.2. [ANOVA](#anova)  
+   1.3. [Chi-Square Tests](#chi-square-tests)  
+   1.4. [Parametric vs Non-Parametric Alternatives](#parametric-vs-non-parametric-alternatives)  
+   1.5. [Assumption Testing](#assumption-testing)
+
+
+2. [Hypothesis Testing](#hypothesis-testing)  
+   2.1. [Null vs. Alternative Hypotheses](#null-vs-alternative-hypotheses)  
+   2.2. [Confidence Intervals & P-values](#confidence-intervals--p-values)  
+   2.3. [Effect Sizes](#effect-sizes)  
+   2.4. [Causality](#causality)
+
+3. [Power Analysis & Sample Size Estimation](#power-analysis--sample-size-estimation)  
+   3.1. [Minimum Detectable Effect (MDE)](#minimum-detectable-effect-mde)  
+   3.2. [Sample Size Formula](#sample-size-formula)  
+   3.3. [Trade-offs](#trade-offs)
+
+4. [A/B Testing Design](#ab-testing-design)  
+   4.1. [Frequentist vs Bayesian A/B Testing](#frequentist-vs-bayesian-ab-testing)  
+   4.2. [Sequential Testing and FDR Correction](#sequential-testing-and-fdr-correction)  
+   4.3. [Confidence vs Credible Intervals](#confidence-vs-credible-intervals)
+
+5. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis) ✅  
+   5.1. [Aggregate Geo-Based A/B Tests](#aggregate-geo-based-ab-tests)  
+   5.2. [Pre/Post Trends and Control Matching](#prepost-trends-and-control-matching)  
+   5.3. [Applications for Brand/Media Testing](#applications-for-brandmedia-testing)
+
+6. [Regression](#regression)  
+   6.1. [Simple Linear Regression](#simple-linear-regression)  
+   6.2. [Multiple Linear Regression](#multiple-linear-regression)  
+   6.3. [Logistic Regression](#logistic-regression)
+
+7. [Survival Analysis](#survival-analysis)  
+   7.1. [Kaplan-Meier Curve](#kaplan-meier-curve)  
+   7.2. [Log-Rank Test](#log-rank-test)  
+   7.3. [Cox Regression](#cox-regression)
+
+8. [Control Charts](#control-charts)
+
+9. [Design of Experiments (DoE)](#design-of-experiments-doe)
+      
+
+**Further Learning**
+
+    - Usual structure/breakdown of data collected for tests and to calculate required size
+    - Understand Parametric vs. non-parametric t-tests
+    - Understand test alternatives for non-equal sample size split like Welch's T-test.
+    - How data should be structured to ingest and run the tests. time-series, user-level, aggregations?
+    - Code for each test? manual coding? prebuilt function on statsmodels or other?
+    - Build code library? Build functions packages for my own work?
+
+
+10. [Libraries](#libraries)
+- `scipy.stats`
+- `statsmodels.stats.api` (for t-tests, ANOVA, power analysis)
+- `pingouin` (for effect sizes, CI)
+- `bayespy`, `PyMC`, `pymc3` (for Bayesian A/B testing)
+- `GeoLift` (R package; similar analysis can be replicated in Python)
+- `pandas`, `numpy`, `matplotlib`, `seaborn`, `plotly` (for exploratory & visual analysis)
+
+11. [Resources](#resources)
+- [ ] Data Tab: Full Lecture on Data Science Statistics https://www.youtube.com/watch?v=K9teElePNkk
+- [ ] Statistical Power  https://www.youtube.com/watch?v=Rsc5znwR5FA&t=395s
+- [ ] Power Analysis and Sample Size https://www.youtube.com/watch?v=VX_M3tIyiYk&t=246s
+
+---
+
+## Statistical Testing
+
+
+### T-Tests
+
+* One sample t-test: to see if a sample mean value is significantly different from the mean reference value  
+* Independent Samples t-test: compare significant difference between the mean value of two independent samples (two drugs, campaigns, etc.)  
+* Paired Samples t-test: compare means of two dependent groups (e.g., before and after treatment)
+
+- t-test samples must be normally distributed (else use non-parametric t-test like Mann–Whitney U test which compares medians)  
+- In an independent two-sample t-test, samples must be **equal variance (test with Levene’s test)**
+- Null: no difference. Alt: significant difference.  
+- Calculate t-statistic = (difference in means / standard error), then get the t-critical value for the sample’s degrees of freedom. If t-stat > t-critical → reject null
+
+### ANOVA
+
+* Extension of t-test when comparing more than two samples  
+* **One-Way ANOVA**: is like an independent two sample t-test. one measurement across samples at one moment in time. It examines the effect of one independent categorical variable on a continuous variable.  
+* **Two-Way ANOVA**: is like one way but tests the effect of two categorical independent variables on a continuous variable (effect on salary due to age and gender). it also evaluates the impact of the interaction of the two categorical variables.
+* **Repeated Measures ANOVA**: it's like a paired t-test. Measure samples at three or more times times before and after a treatment and analyze the mean difference sample. Here samples are dependent (e.g. heart rate before workout, right after workour, 2hours after workout)
+* **Mixed-Model ANOVA**: Combines repeated and between-subjects
+
+- Requires normal distribution(if not, use Kruskal-Wallis-Test), equal variances (if not, use Welch-ANOVA), and no significant outliers. (plus for for repeated measures ANOVA, sphericity is required (Mauchly’s test)  
+- F-statistic = between-group variance / within-group variance  
+- If F > F-critical, reject null. Post-hoc tests are used to quantify the differences due to independent factors and interactions of multiple factors (effect size tests)
+
+### Chi-Square Tests
+
+* For nominal categorical variables, to see if there is a relationship between categorical variables (e.g. relationship between gender and favourite newspaper).
+* Assumptions:
+  - Expected frequencies per cell is greater than 5
+  - account for different nominal categories without ordinal values or ranks (like categories of education (high school, Bsc, Msc, Phd). for rank copnsideration try spearman correlation, Mann-Whitney U-Test or Kruskal-Wallis-Test
+* Null: no relationship; Alt: there is a relationship  
+* Use chi-square statistic + degrees of freedom to determine p-value
+
+### Parametric vs Non-Parametric Alternatives
+
+- Parametric Tests are used when your sample data is normally distributed. if it's not, you should then use non-parametric tests.
+- Parametric Tests run the analysis on the raw numerical data. Non-parametric tests usually rank the numerical values, use that to create normal distributions then run the analyses. Examples of parametric tests and their non-parametric test equivalents below:
+
+
+| Test Type                          | Parametric Test                     | Nonparametric Test               | 
+|-----------------------------------|-------------------------------------|----------------------------------|
+| **One Sample**                    | Simple t-Test                       | Wilcoxon test for one sample     |
+| **Two Dependent Samples**         | Paired Sample t-Test                | Wilcoxon Test                    |
+| **Two Independent Samples**       | Unpaired Sample t-Test              | Mann–Whitney U Test              |
+| **>2 Independent Samples**        | One-way (Factorial) ANOVA           | Kruskal–Wallis Test              |
+| **>2 Dependent Samples**          | Repeated Measures ANOVA             | Friedman Test                    |
+| **Correlation Between Variables** | Pearson Correlation                 | Spearman/Kendall's Tau     |
+
+
+### Assumption Testing
+
+**Normality Tests**  
+1. Analytical Tests:
+   - Kolmogorov-Smirnove Test (used to test other distribution types as well)
+   - Shapiro-Wilk Test
+   - Anderson-Darson (used to test other distribution types as well)
+
+    Null Hypothesis: Data fits normal distribution, if p less than 0.05, reject null, non-normal distribution. p greater, fail to reject and assume normal distribution.
+
+**Problems with analytical tests:** p-value depends on sample size. small samples mostly yield non-representative large values. Therefore graphical tests are more frequently used.
+
+3. Graphical Test:
+    - Normal histogram plotting to visually detect a bell curve
+    - Quantile-Quantie Plot: Normally distributed data points wold follow the disagonal line plotted as reference. non-normal would typical form an S-shape instead
+      
+**Variance Equality**  
+- Levene’s Test  
+- Null: equal variance. If p < 0.05 → reject → use **Welch's t-test** instead of a t-test which requires homogenity of variance.
+
+---
+
+## Hypothesis Testing
+
+### Null vs. Alternative Hypotheses
+
+_TODO: Add notes_
+
+### Confidence Intervals & P-values
+
+_TODO: Add notes_
+
+### Effect Sizes
+
+- Basically indicates how strong an observed effect is. Depending on the test you're running, the effect could be the strength of a difference or correlation.
+- Cohen’s d for t-tests (0 to 1)
+- r², η² for regression and ANOVA
+
+### Causality
+
+- Strong and significant correlation  
+- Clear temporal sequence  
+- Controlled experiment or theoretical reasoning
+
+---
+
+## Power Analysis & Sample Size Estimation for A/B Testing
+
+Goal: Estimate how much data you need to detect a meaningful effect with confidence.
+
+Power = 1 − 𝛽
+
+1−β: Probability of detecting a real effect (usually set to 0.8 = 80%) **i.e. The probability of correctly rejecting the null.**
+α (Type I error): Risk of a false positive (commonly 0.05)
+β (Type II error): Risk of a false negative (commonly 0.2)
+→ Power is directly tied to Type II error
+
+### Minimum Detectable Effect (MDE)
+    This is the minimum effect we want to be able to detect in our experiment (e.g. 2% absolute increase in the conversion rate).
+
+### Sample Size Formula
+
+\[ n = \frac{2 \cdot (Z_{1-\alpha/2} + Z_{1-\beta})^2 \cdot \bar{p}(1 - \bar{p})}{(p_1 - p_2)^2} \]
+
+- Resulting n is the required sample size per group (not total)
+- Multiply by 2 for total sample size for both control and variant (If A/B test, or more if 3 groups for example)
+
+### Trade-offs
+
+| Factor | Effect |
+|--------|--------|
+| Lower α | Fewer false positives, more data |
+| Lower β (higher power) | Fewer missed effects, more data |
+| Smaller MDE | More data needed |
+
+
+### Inputs for Sample Size Calculation
+- Baseline rate (e.g. 10% conversion)
+- MDE (e.g. +2% absolute = 12%)
+- α = 0.05 (significance level)
+- Power = 0.8
+
+🔁 Error Balance & Trade-Offs
+| Lower α (Type I error) | ➖ Fewer false positives<br>➕ Need more data |
+| Lower β (higher power) | ➖ Fewer false negatives<br>➕ Need more data |
+| Smaller MDE | ➕ Detect subtle effects<br>➖ Much larger sample required |
+
+**Ensures test is neither underpowered (miss real effects) nor wasteful**
+---
+
+## A/B Testing Design
+
+### Frequentist vs Bayesian A/B Testing
+
+_TODO: Add notes_
+
+### Sequential Testing and FDR Correction
+
+_TODO: Add notes_
+
+### Confidence vs Credible Intervals
+
+_TODO: Add notes_
+
+---
+
+## Geo Experiments & Geo Lift Analysis ✅
+
+### Aggregate Geo-Based A/B Tests
+
+_TODO: Add notes_
+
+### Pre/Post Trends and Control Matching
+
+_TODO: Add notes_
+
+### Applications for Brand/Media Testing
+
+_TODO: Add notes_
+
+---
+
+## Regression
+
+### Simple Linear Regression
+
+_TODO: Add notes_
+
+### Multiple Linear Regression
+
+_TODO: Add notes_
+
+### Logistic Regression
+
+_TODO: Add notes_
+
+---
+
+## Survival Analysis
+
+### Kaplan-Meier Curve
+
+_TODO: Add notes_
+
+### Log-Rank Test
+
+_TODO: Add notes_
+
+### Cox Regression
+
+_TODO: Add notes_
+
+---
+
+## Control Charts
+
+_TODO: Add notes_
+
+---
+
+## Design of Experiments (DoE)
+
+_TODO: Add notes_
+
+---
+
+## Libraries
+
+- `scipy.stats`  
+- `statsmodels.stats.api`  
+- `pingouin`  
+- `bayespy`, `PyMC`, `pymc3`  
+- `GeoLift`  
+- `pandas`, `numpy`, `matplotlib`, `seaborn`, `plotly`
+
+---
+
+## Notes & Summaries
+
+- [ ] Add theoretical explanations, formulas, and insights here
+
+---
+
+## Resources
+
+- [ ] Add articles, blogs, papers, videos, or documentation  
+- [ ] [Data Tab: Full Lecture on Data Science Statistics](https://www.youtube.com/watch?v=K9teElePNkk)  
+- [ ] [Statistical Power](https://www.youtube.com/watch?v=Rsc5znwR5FA&t=395s)  
+- [ ] [Power Analysis and Sample Size](https://www.youtube.com/watch?v=VX_M3tIyiYk&t=246s)
+

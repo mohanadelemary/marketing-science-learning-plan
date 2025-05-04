@@ -175,29 +175,51 @@ Goal: Determine strength and direction of correlation (usually a value between -
 
 ### Null vs. Alternative Hypotheses
 
-_TODO: Add notes_
+- A **hypothesis test** evaluates evidence from a sample to make inferences about a population.
+- **Null hypothesis (H₀)**: Assumes no effect or no difference. It's the default assumption.
+- **Alternative hypothesis (H₁ or Hₐ)**: Suggests there is an effect or difference.
+- Example:  
+  - H₀: There is no difference between campaign A and B  
+  - H₁: There is a statistically significant difference between campaign A and B
+
+We reject or fail to reject the null based on the p-value and our chosen significance threshold (e.g., α = 0.05).
+
 
 ### Confidence Intervals & P-values
 
-_TODO: Add notes_
-Confidence Intervals (Freq.) and Credible Interval (Bayesian)
 
-Right way to define confidence level of 95%: If we keep getting samples, we know that 95% of the samples extracted will contain the population mean
+- A **p-value** measures how likely it is to observe the data (or something more extreme) **assuming the null hypothesis is true**.
+  - A small p-value (typically < 0.05) means the observed result is unlikely under H₀, and we **reject** H₀.
+  - A large p-value suggests there is **insufficient evidence** to reject H₀.
+
+- A **confidence interval (CI)** provides a range of plausible values for a population parameter (like a mean or proportion).
+  - A **95% CI** means: if we repeatedly sampled and calculated a CI, 95% of those intervals would contain the true population value.
+  - CI gives both the **effect size** and its **precision**.
 
 ### Effect Sizes
 
-- Basically indicates how strong an observed effect is. Depending on the test you're running, the effect could be the strength of a difference or correlation.
-- Cohen’s d for t-tests (0 to 1)
-- r², η² for regression and ANOVA
+- **Effect size** measures the **magnitude** of an observed effect, independent of sample size. Depending on the test you're running, the effect could be the strength of a difference or correlation.
+- Helps quantify **practical significance**, not just statistical significance.
+- Common effect size metrics:
+  - **Cohen’s d**: For mean differences in t-tests (0.2 = small, 0.5 = medium, 0.8 = large)
+  - **r²**: Proportion of variance explained by model (for regression)
+  - **η² (eta squared)**: Effect size in ANOVA contexts
+
+
 
 ### Causality
 
 **Conditions to prove Causality:**
-1. Strong and statistically signifcant correlation coefficient.
-2. Proof of sequence, this can be done in 3 ways:
-   a. Chronological sequence of events (variable A then B) so variable B results happened after variable A happened.
-   b. A controlled experiment in which the two variables can specifically influenced.
-   c. Strong Theory on how the direction of the relationship goes.
+1. **Strong and statistically significant correlation**
+2. **Temporal precedence** (cause must come before effect), shown in one of three ways:
+   a. Clear **chronological ordering** (e.g., variable A occurs before B)  
+   b. **Controlled experiments** (e.g., random assignment of A, then measure B)  
+   c. Existence of a **strong theoretical framework** supporting the direction from A → B
+
+> Note: Correlation alone is **not sufficient** for causality. You must rule out **confounding factors** and ensure the relationship isn’t spurious.
+
+![Distinguishing-third-variables-mediators-moderators-confounders-and-colliders](https://github.com/user-attachments/assets/23c8dfc8-67f0-4211-a088-f18c976a56cd)
+
 
 ---
 
@@ -258,7 +280,8 @@ _TODO: Add notes_
 
 ### Confidence vs Credible Intervals
 
-_TODO: Add notes_
+- **Frequentist confidence interval**: Based on repeated sampling; says nothing about probability of parameters.
+- **Bayesian credible interval**: Directly represents the **probability** that the parameter lies within the interval, given the data and prior beliefs.
 
 ---
 

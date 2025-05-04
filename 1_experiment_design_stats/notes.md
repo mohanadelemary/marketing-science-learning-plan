@@ -26,7 +26,7 @@
 5. [A/B Testing Design](#ab-testing-design)  
    4.1. [Frequentist vs Bayesian A/B Testing](#frequentist-vs-bayesian-ab-testing)  
    4.2. [Sequential Testing and FDR Correction](#sequential-testing-and-fdr-correction)  
-   4.3. [Confidence vs Credible Intervals](#confidence-vs-credible-intervals)
+   4.3. [Confidence vs Credible Intervals](#confidence-vs-credible-intervals)  
    4.4. [Bayesian A/B Testing Concepts](#bayesian-a/b-testing-concepts)
 
 7. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis) ✅  

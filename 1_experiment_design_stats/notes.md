@@ -297,39 +297,100 @@ _TODO: Add notes_
    - Plan to monitor results continuously
    - Prior experiments inform current ones
      
-   **What to Learn**
+   **What to Know**
 
-   - **Bayesian Basics**
-     - Prior, likelihood, posterior, credible interval
-     - Bayesian vs. frequentist interpretation
+   #### 🔹 Bayesian Basics
 
-   - **Bayesian A/B Testing**
-     - Model conversion rates using Beta distribution
-     - Posterior probability: P(B > A)
-     - Decision-making using credible intervals or expected loss
-
-   - **Applications**
-     - CVR/CTR testing
-     - Revenue/lift measurement
-     - Geo experiments and incremental impact
-
-   - **Priors**
-     - Flat (uninformative) vs. informative (based on past data)
-     - Use to regularize or incorporate knowledge
-
-   - **Decision Rules**
-     - Choose B if P(B > A) > 0.95
-     - Use expected loss or regret minimization for business-driven decisions
+   - **Prior**: Represents your belief about a parameter before seeing the data.  
+     Example: Based on past campaigns, we believe CVR is around 5%.
+   
+   - **Likelihood**: The probability of observing the current data given different parameter values.  
+     This comes from your actual experiment.
+   
+   - **Posterior**: Updated belief after seeing the data.  
+     Calculated using Bayes’ Theorem:
+   
+     \[
+     \text{Posterior} \propto \text{Prior} \times \text{Likelihood}
+     \]
+   
+   - **Credible Interval**: The Bayesian version of a confidence interval.  
+     A 95% credible interval means there's a 95% probability the true value lies within that range.
+   
+   - **Bayesian vs Frequentist**:  
+     - Bayesian interprets probability as **degree of belief** (based on both prior + data).  
+     - Frequentist sees probability as **long-run frequency** of events in repeated experiments.
 
 ---
 
-### 📚 Resources
+   #### 🔹 Bayesian A/B Testing
+   
+   - Used to compare two variants (A and B) using probability rather than p-values.
+   
+   - For binomial outcomes (e.g. conversions), we use the **Beta distribution**:
+     - If A has `a_successes` and `a_failures`, its posterior is:  
+       \[
+       \text{Beta}(a_{\text{prior}} + a_{\text{successes}}, b_{\text{prior}} + a_{\text{failures}})
+       \]
+   
+   - For each variant, simulate thousands of samples from their posteriors and compare (possibly using Monte-Carlo Simulation):
+     - Calculate \[
+     P(\text{B} > \text{A})
+     \]
+     — the probability that B is better than A.
+   
+   - You can also compute:
+     - **Expected uplift**
+     - **Expected loss** of choosing one over the other
 
-- [StatQuest: Bayesian Inference (Video)](https://www.youtube.com/watch?v=HZGCoVF3YvM)
-- [Bayesian A/B Testing – Data School](https://www.youtube.com/watch?v=9MG4vrlM-zw)
-- [BayesAB GitHub](https://github.com/john-hewitt/bayes_ab)
-- [PyMC Examples](https://docs.pymc.io/notebooks/GLM-hierarchical.html)
+---
 
+   #### 🔹 Applications
+   
+   - **CVR / CTR Testing**:  
+     Estimate conversion rate distributions and choose the version with highest probability of being best.
+   
+   - **Revenue & Lift Measurement**:  
+     Extend Bayesian testing to model not just conversion rates, but also **average order value** or **incremental ROAS**.
+   
+   - **Geo Experiments**:  
+     Incorporate prior campaign lift data across geos or use **hierarchical priors** when multiple markets share structure.
+
+---
+
+   #### 🔹 Priors
+   
+   - **Flat / Uninformative Priors**:  
+     Use when you have no prior knowledge (e.g., `Beta(1,1)` = uniform).
+   
+   - **Informative Priors**:  
+     Use when past data or domain expertise is available.  
+     Example: "Based on past performance, we expect CVR ~ Beta(20, 380)" (i.e. 5%).
+   
+   - Good priors help regularize results when sample sizes are small or noisy.
+
+---
+
+   #### 🔹 Decision Rules
+   
+   - Make decisions using **posterior probabilities** instead of binary p-values:
+     - E.g., choose B if  
+       \[
+       P(B > A) > 0.95
+       \]
+   
+   - Or use **expected loss minimization**:
+     - Simulate losses from choosing the worse variant
+     - Pick the one with the **lower expected cost** of being wrong
+
+---
+
+   ✅ Summary:
+   Bayesian testing gives richer, more intuitive results like:
+   - "There is a 97.5% chance variant B is better than A"
+   - "The expected uplift from switching to B is 1.2%, with 95% credible interval of [0.4%, 2.3%]"
+   
+   Perfect for business decision-making under uncertainty.
 
 ---
 

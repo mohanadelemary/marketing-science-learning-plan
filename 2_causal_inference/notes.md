@@ -1,4 +1,4 @@
-# **2. Causal Inference & Regression Modeling**
+# **2. Progressive Experimentation: Causal, DiD, Geo Tests & Regression Modeling**
 
 > Goal: Move beyond correlation and estimate treatment effects in both experimental and observational settings.
 
@@ -11,10 +11,18 @@
     - Instrumental Variables (IV)
     - Propensity Score Matching
     - Uplift modeling (individual-level treatment effect estimation)
+
+Geo Experiments & Geo Lift Analysis
+5.1. Aggregate Geo-Based A/B Tests
+5.2. Pre/Post Trends and Control Matching
+5.3. Applications for Brand/Media Testing
+
 - **Regression Models**
     - OLS, Logistic Regression
     - Fixed Effects, Clustered SEs
     - Interaction terms
+ 
+  
 
 ### 🧰 Libraries:
 

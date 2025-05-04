@@ -2,7 +2,7 @@
 
 ## 📘 Index
 
-1. [Statistical Testing](#statistical-testing)  
+1. [Statistical Testing](#statistical-testing)  ✅ 
    1.1. [T-Tests](#t-tests)  
    1.2. [ANOVA](#anova)  
    1.3. [Chi-Square Tests](#chi-square-tests)  
@@ -12,39 +12,39 @@
    
 
 
-3. [Hypothesis Testing](#hypothesis-testing)  
+3. [Hypothesis Testing](#hypothesis-testing)  ✅ 
    2.1. [Null vs. Alternative Hypotheses](#null-vs-alternative-hypotheses)  
    2.2. [Confidence Intervals & P-values](#confidence-intervals--p-values)  
    2.3. [Effect Sizes](#effect-sizes)  
    2.4. [Causality](#causality)
 
-4. [Power Analysis & Sample Size Estimation](#power-analysis--sample-size-estimation)  
+4. [Power Analysis & Sample Size Estimation](#power-analysis--sample-size-estimation)  ✅ 
    3.1. [Minimum Detectable Effect (MDE)](#minimum-detectable-effect-mde)  
    3.2. [Sample Size Formula](#sample-size-formula)  
    3.3. [Trade-offs](#trade-offs)
 
-5. [A/B Testing Design](#ab-testing-design)  
+5. [A/B Testing Design](#ab-testing-design)  ✅ 
    4.1. [Frequentist vs Bayesian A/B Testing](#frequentist-vs-bayesian-ab-testing)  
    4.2. [Sequential Testing and FDR Correction](#sequential-testing-and-fdr-correction)  
    4.3. [Confidence vs Credible Intervals](#confidence-vs-credible-intervals)  
    4.4. [Bayesian A/B Testing Concepts](#bayesian-a/b-testing-concepts)
 
-7. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis) ✅  
+7. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  
    5.1. [Aggregate Geo-Based A/B Tests](#aggregate-geo-based-ab-tests)  
    5.2. [Pre/Post Trends and Control Matching](#prepost-trends-and-control-matching)  
    5.3. [Applications for Brand/Media Testing](#applications-for-brandmedia-testing)
 
-8. [Regression](#regression)  
+8. [Regression](#regression)  ✅ 
    6.1. [Simple Linear Regression](#simple-linear-regression)  
    6.2. [Multiple Linear Regression](#multiple-linear-regression)  
    6.3. [Logistic Regression](#logistic-regression)
 
-9. [Survival Analysis](#survival-analysis)  
+9. [Survival Analysis](#survival-analysis)  ✅ 
    7.1. [Kaplan-Meier Curve](#kaplan-meier-curve)  
    7.2. [Log-Rank Test](#log-rank-test)  
    7.3. [Cox Regression](#cox-regression)
 
-10. [Control Charts](#control-charts)
+10. [Control Charts](#control-charts)  ✅ 
 
 11. [Design of Experiments (DoE)](#design-of-experiments-doe)
       

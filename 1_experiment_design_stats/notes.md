@@ -27,25 +27,26 @@
    4.1. [Frequentist vs Bayesian A/B Testing](#frequentist-vs-bayesian-ab-testing)  
    4.2. [Sequential Testing and FDR Correction](#sequential-testing-and-fdr-correction)  
    4.3. [Confidence vs Credible Intervals](#confidence-vs-credible-intervals)
+   4.4. [Bayesian A/B Testing Concepts](#bayesian-a/b-testing-concepts)
 
-6. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis) ✅  
+7. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis) ✅  
    5.1. [Aggregate Geo-Based A/B Tests](#aggregate-geo-based-ab-tests)  
    5.2. [Pre/Post Trends and Control Matching](#prepost-trends-and-control-matching)  
    5.3. [Applications for Brand/Media Testing](#applications-for-brandmedia-testing)
 
-7. [Regression](#regression)  
+8. [Regression](#regression)  
    6.1. [Simple Linear Regression](#simple-linear-regression)  
    6.2. [Multiple Linear Regression](#multiple-linear-regression)  
    6.3. [Logistic Regression](#logistic-regression)
 
-8. [Survival Analysis](#survival-analysis)  
+9. [Survival Analysis](#survival-analysis)  
    7.1. [Kaplan-Meier Curve](#kaplan-meier-curve)  
    7.2. [Log-Rank Test](#log-rank-test)  
    7.3. [Cox Regression](#cox-regression)
 
-9. [Control Charts](#control-charts)
+10. [Control Charts](#control-charts)
 
-10. [Design of Experiments (DoE)](#design-of-experiments-doe)
+11. [Design of Experiments (DoE)](#design-of-experiments-doe)
       
 
 **Further Learning**
@@ -283,6 +284,53 @@ _TODO: Add notes_
 - **Frequentist confidence interval**: Based on repeated sampling; says nothing about probability of parameters.
 - **Bayesian credible interval**: Directly represents the **probability** that the parameter lies within the interval, given the data and prior beliefs.
 
+### Bayesian A/B Testing Concepts
+
+   **Why It Matters:**
+   - Gives probability-based conclusions (e.g. "B is better than A with 95% certainty")
+   - Allows continuous monitoring without p-value hacking.
+   - Useful with small samples or historical priors.
+   
+   **When to Use**
+   - Small samples or low-traffic tests
+   - Want interpretable probability statements
+   - Plan to monitor results continuously
+   - Prior experiments inform current ones
+     
+   **What to Learn**
+
+   - **Bayesian Basics**
+     - Prior, likelihood, posterior, credible interval
+     - Bayesian vs. frequentist interpretation
+
+   - **Bayesian A/B Testing**
+     - Model conversion rates using Beta distribution
+     - Posterior probability: P(B > A)
+     - Decision-making using credible intervals or expected loss
+
+   - **Applications**
+     - CVR/CTR testing
+     - Revenue/lift measurement
+     - Geo experiments and incremental impact
+
+   - **Priors**
+     - Flat (uninformative) vs. informative (based on past data)
+     - Use to regularize or incorporate knowledge
+
+   - **Decision Rules**
+     - Choose B if P(B > A) > 0.95
+     - Use expected loss or regret minimization for business-driven decisions
+
+---
+
+### 📚 Resources
+
+- [StatQuest: Bayesian Inference (Video)](https://www.youtube.com/watch?v=HZGCoVF3YvM)
+- [Bayesian A/B Testing – Data School](https://www.youtube.com/watch?v=9MG4vrlM-zw)
+- [BayesAB GitHub](https://github.com/john-hewitt/bayes_ab)
+- [PyMC Examples](https://docs.pymc.io/notebooks/GLM-hierarchical.html)
+
+
 ---
 
 ## Geo Experiments & Geo Lift Analysis ✅
@@ -457,9 +505,10 @@ also power analysis and sample size and minimum effect required
 - `scipy.stats`  
 - `statsmodels.stats.api`  
 - `pingouin`  
-- `bayespy`, `PyMC`, `pymc3`  
+- `bayespy`, `bayesAB`, `PyMC`, `pymc3`  
 - `GeoLift`  
 - `pandas`, `numpy`, `matplotlib`, `seaborn`, `plotly`
+- ArviZ
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 📘 Index
 
-1. [Statistical Testing](#statistical-testing)  ✅ 
+1. [Statistical Testing](#statistical-testing)  ✅   
    1.1. [T-Tests](#t-tests)  
    1.2. [ANOVA](#anova)  
    1.3. [Chi-Square Tests](#chi-square-tests)  
@@ -10,31 +10,31 @@
    1.5. [Assumption Testing](#assumption-testing)  
    1.6. [Correlation](#correlation)
 
-2. [Hypothesis Testing](#hypothesis-testing)  ✅ 
+2. [Hypothesis Testing](#hypothesis-testing)  ✅   
    2.1. [Null vs. Alternative Hypotheses](#null-vs-alternative-hypotheses)  
    2.2. [Confidence Intervals & P-values](#confidence-intervals--p-values)  
    2.3. [Effect Sizes](#effect-sizes)  
    2.4. [Causality](#causality)
 
-3. [Power Analysis & Sample Size Estimation](#power-analysis--sample-size-estimation)  ✅ 
+3. [Power Analysis & Sample Size Estimation](#power-analysis--sample-size-estimation)  ✅   
    3.1. [Minimum Detectable Effect (MDE)](#minimum-detectable-effect-mde)  
    3.2. [Sample Size Formula](#sample-size-formula)  
    3.3. [Trade-offs](#trade-offs)
 
-4. [A/B Testing Design](#ab-testing-design)  ✅ 
+4. [A/B Testing Design](#ab-testing-design)  ✅   
    4.1. [Frequentist vs Bayesian A/B Testing](#frequentist-vs-bayesian-ab-testing)  
    4.2. [Sequential Testing and FDR Correction](#sequential-testing-and-fdr-correction)  
    4.3. [Confidence vs Credible Intervals](#confidence-vs-credible-intervals)  
    4.4. [Bayesian A/B Testing Concepts](#bayesian-ab-testing-concepts)
 
-5. [Survival Analysis](#survival-analysis)  ✅ 
+5. [Survival Analysis](#survival-analysis)  ✅   
    5.1. [Kaplan-Meier Curve](#kaplan-meier-curve)  
    5.2. [Log-Rank Test](#log-rank-test)  
    5.3. [Cox Regression](#cox-regression)
 
-6. [Control Charts](#control-charts)  ✅ 
+6. [Control Charts](#control-charts)  ✅   
 
-7. [Design of Experiments (DoE)](#design-of-experiments-doe)  
+7. [Design of Experiments (DoE)](#design-of-experiments-doe)    
 
 **Further Learning**
 

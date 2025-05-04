@@ -33,6 +33,8 @@
 ## 🔗 Resources
 
 - [ ] Add articles, blogs, papers, videos, or documentation here.
+- [ ] PYMC-Marketing  https://www.youtube.com/watch?v=RY-M0tvN77s
+- [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s
 
 
 

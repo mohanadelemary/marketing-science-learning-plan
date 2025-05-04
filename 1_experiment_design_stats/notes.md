@@ -34,9 +34,9 @@
 
 6. [Control Charts](#control-charts)  ✅   
 
-7. [Design of Experiments (DoE)](#design-of-experiments-doe)    
+7. [Design of Experiments (DoE)](#design-of-experiments-doe)    ❌  
 
-**Further Learning**
+**Further Learning**  ❌  
 
     - Usual structure/breakdown of data collected for tests and to calculate required size
     - Understand Parametric vs. non-parametric t-tests

@@ -243,6 +243,7 @@ Power = 1 − 𝛽
 | Smaller MDE | ➕ Detect subtle effects<br>➖ Much larger sample required |
 
 **Ensures test is neither underpowered (miss real effects) nor wasteful**
+
 ---
 
 ## A/B Testing Design

@@ -65,7 +65,42 @@ Geo Experiments & Geo Lift Analysis
 ____________________________________________________________________________________________________________________________________
 
 
+Regression
+Simple Linear Regression
+Linear equation that you solve for by minimizing the MSE or others like ASE.
+Assumptions in SLR to be checked before interpreting the regression results:
 
+Relationship can be fitted by a straight line
+Independence of errors. the error between real and predicted values for one value doesnt's influence the error for others
+Homoscedasticity: If resdiuals are plotted on a y-axis along the predicted values on x-axis, they should be evenly distributed across the plane and not for exampleincrease as the predicted values on the x-axis increase like a funnel shape (heteroscedasdticity)
+Errors follow a normal distribution (analytical normality tests or Q-Q plots)
+Multiple Linear Regression
+Assumptions in MLR to be checked before interpreting the regression results:
+
+The four assumptions in SLR Plus one more: - No Multi-Collinearity: MC is when two or more predictor variables are highly correlated. hard to assign weights due to info overlap.
+MC is not a massive issue if we just want to predict with the model, but it is if the goal is interpret the influence of predictor variables.
+We determine the R-squared value for each predictor variable. High r-sq. means the variable's variance is higly explained by the other predictor variables.
+From there, we calculate Tolerance and VIF for the variables. VIF measures how much the variance of a regression coefficient is inflated due to multicollinearity (correlation among predictors).
+Treatment of MC: consider removing high MC variable or combining variables.
+MLR summary
+
+Unstandardized coefficient per variable are what's used in the equation but handles multiple units of variables
+Standardized coefficients are standardized among units and sclaes, giving a more standardized and fair way to evaluate the influence and importance of each variable in the regression.
+R = Correlation
+R-Squared = shows how well is the variance in the predicted value explained by model
+Adjusted R-Squared = Accounts for the number of independent variables in the model. a more accurate measure of explanatory power. if model has too many predictors - regular r-sq could overestimate the power, therefore adjusted r-sq. is then recommended.
+Standard error: average distance between line and observed data
+Dummy Variables:
+
+If you one-hot encode categories, you drop one of the new variables and use as reference only
+Logistic Regression
+To classify data rows into binary outputs (0 and 1)
+For this we use the logistic function that outputs values between zero and one.
+You solve for it using maximum likelihood estimation.
+Outputs probability of an event between 0 and 1. based on the threshold you define (usually 0.5) you can make a prediction.
+You get coefficients and p-values
+You test for statistical significance by wald's z-test or chi-squared (unlike t-statistic for lin reg)
+You also get r2 values from multiple variations to determine if the model explains the variablitiy in the predicted variable.
 
 
 

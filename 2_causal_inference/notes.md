@@ -21,7 +21,9 @@ Geo Experiments & Geo Lift Analysis
     - OLS, Logistic Regression
     - Fixed Effects, Clustered SEs
     - Interaction terms
- 
+ Regression ✅ 6.1. Simple Linear Regression
+6.2. Multiple Linear Regression
+6.3. Logistic Regression
   
 
 ### 🧰 Libraries:

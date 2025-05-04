@@ -7,7 +7,7 @@
    1.2. [ANOVA](#anova)  
    1.3. [Chi-Square Tests](#chi-square-tests)  
    1.4. [Parametric vs Non-Parametric Alternatives](#parametric-vs-non-parametric-alternatives)  
-   1.5. [Assumption Testing](#assumption-testing)
+   1.5. [Assumption Testing](#assumption-testing)  
    1.6. [Correlation](#correlation)
    
 
@@ -86,7 +86,7 @@
 - In an independent two-sample t-test, samples must be **equal variance (test with Levene’s test)**
 - Null: no difference. Alt: significant difference.  
 - Calculate t-statistic = (difference in means / standard error), then get the t-critical value for the sample’s degrees of freedom. If t-stat > t-critical → reject null
-
+---
 ### ANOVA
 
 * Extension of t-test when comparing more than two samples  
@@ -98,7 +98,7 @@
 - Requires normal distribution(if not, use Kruskal-Wallis-Test), equal variances (if not, use Welch-ANOVA), and no significant outliers. (plus for for repeated measures ANOVA, sphericity is required (Mauchly’s test)  
 - F-statistic = between-group variance / within-group variance  
 - If F > F-critical, reject null. Post-hoc tests are used to quantify the differences due to independent factors and interactions of multiple factors (effect size tests)
-
+---
 ### Chi-Square Tests
 
 * For nominal categorical variables, to see if there is a relationship between categorical variables (e.g. relationship between gender and favourite newspaper).
@@ -107,7 +107,7 @@
   - account for different nominal categories without ordinal values or ranks (like categories of education (high school, Bsc, Msc, Phd). for rank copnsideration try spearman correlation, Mann-Whitney U-Test or Kruskal-Wallis-Test
 * Null: no relationship; Alt: there is a relationship  
 * Use chi-square statistic + degrees of freedom to determine p-value
-
+---
 ### Parametric vs Non-Parametric Alternatives
 
 - Parametric Tests are used when your sample data is normally distributed. if it's not, you should then use non-parametric tests.
@@ -122,7 +122,7 @@
 | **>2 Independent Samples**        | One-way (Factorial) ANOVA           | Kruskal–Wallis Test              |
 | **>2 Dependent Samples**          | Repeated Measures ANOVA             | Friedman Test                    |
 | **Correlation Between Variables** | Pearson Correlation                 | Spearman/Kendall's Tau     |
-
+---
 
 ### Assumption Testing
 
@@ -143,7 +143,7 @@
 **Variance Equality**  
 - Levene’s Test  
 - Null: equal variance. If p < 0.05 → reject → use **Welch's t-test** instead of a t-test which requires homogenity of variance.
-
+---
 
 ### Correlation
 Goal: Determine strength and direction of correlation (usually a value between -1 to 1)

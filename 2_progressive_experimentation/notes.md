@@ -4,7 +4,7 @@
 
 ## 📘 Index
 
-1. [Causal Inference](#causal-inference)  
+1. [Causal Inference](#causal-inference)  ❌  
    1.1. [Difference-in-Differences (DiD)](#11-difference-in-differences-did)  
    1.2. [Synthetic Control Method](#12-synthetic-control-method-) ✅  
    1.3. [Regression Discontinuity Design (RDD)](#13-regression-discontinuity-design-rdd)  
@@ -14,25 +14,38 @@
    1.7. [Causal Diagrams & DAGs](#17-causal-diagrams--dags)  
    1.8. [Bayesian Causal Impact](#18-bayesian-causal-impact)
 
-2. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  
+2. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  ❌  
    2.1. Aggregate Geo-Based A/B Tests  
    2.2. Pre/Post Trends and Control Matching  
    2.3. Applications for Brand/Media Testing  
 
-3. [Regression Models](#regression-models)  
+3. [Regression Models](#regression-models)  ❌  
    3.1. Simple Linear Regression  
    3.2. Multiple Linear Regression  
    3.3. Logistic Regression  
 
-4. [Choosing & Designing the Right Causal Method](#choosing--designing-the-right-causal-method)
+4. [Choosing & Designing the Right Causal Method](#choosing--designing-the-right-causal-method)  ❌  
 
-5. [Design of Experiments (DoE)](#design-of-experiments-doe)
+5. [Design of Experiments (DoE)](#design-of-experiments-doe)  ❌  
 
-6. [Libraries](#libraries)  
-7. [Notes & Summaries](#notes--summaries)  
-8. [Resources](#resources)
+6. [Libraries](#libraries) ❌  
+   - `statsmodels` (OLS, logistic, fixed effects, DiD)
+   - `econml` (CATE estimation, uplift modeling, IVs, meta learners)
+   - `DoWhy` (causal graphs, identifiability, backdoor criteria)
+   - `causalimpact` (Bayesian time series intervention model, ported from R to Python)
+   - `PyMC`, `pymc3` (Bayesian modeling, priors, posteriors)
+   - `scikit-learn` (base regression models, preprocessing)
+   - `CausalML` (uplift models: S-learner, T-learner, X-learner)
+
+8. Coding Packages ❌  
+
+9. [Resources](#resources)  ❌  
+
+   - [ ] PYMC-Marketing https://www.youtube.com/watch?v=RY-M0tvN77s  
+   - [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s
 
 ---
+
 ## Brief Overview of Tests Under the Hood
 
 | Method                        | What's Actually Tested                              | Under-the-Hood Test              |
@@ -50,7 +63,7 @@
 ### 1.1 Difference-in-Differences (DiD)
 _TODO: Add theory and assumptions._
 
-### 1.2 Synthetic Control Method ✅
+### 1.2 Synthetic Control Method
 _TODO: Add summary and applied notes._
 
 ### 1.3 Regression Discontinuity Design (RDD)
@@ -186,22 +199,5 @@ Design of Experiments (DoE) is a structured, statistical approach to **planning 
 
 ---
 
-## Libraries
 
-- `statsmodels` (OLS, logistic, fixed effects, DiD)
-- `econml` (CATE estimation, uplift modeling, IVs, meta learners)
-- `DoWhy` (causal graphs, identifiability, backdoor criteria)
-- `causalimpact` (Bayesian time series intervention model, ported from R to Python)
-- `PyMC`, `pymc3` (Bayesian modeling, priors, posteriors)
-- `scikit-learn` (base regression models, preprocessing)
-- `CausalML` (uplift models: S-learner, T-learner, X-learner)
-
-## Notes & Summaries
-
-- [ ] Add theoretical explanations, formulas, and insights here.
-
-## Resources
-
-- [ ] PYMC-Marketing https://www.youtube.com/watch?v=RY-M0tvN77s  
-- [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s
 

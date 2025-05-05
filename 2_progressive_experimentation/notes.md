@@ -43,6 +43,7 @@
 
    - [ ] PYMC-Marketing https://www.youtube.com/watch?v=RY-M0tvN77s  
    - [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s
+   - [ ] Diff-in-Diff Models https://www.youtube.com/watch?v=w56HI8YxLMQ&t=217s
 
 ---
 
@@ -61,7 +62,64 @@
 ## Causal Inference
 
 ### 1.1 Difference-in-Differences (DiD)
-_TODO: Add theory and assumptions._
+- Essentially a regression model.
+- Measures causal effect in one metric among two groups
+- Measures trend in each group pre and post treatment
+- Then determines the difference between those two diff's: +ve or -ve result
+y=β 
+0
+
+ +β 
+1
+​
+ D+β 
+2
+​
+ T+β 
+3
+​
+ (D×T)+u
+**Core Assumptions in Difference-in-Differences (DiD) & How to test for them**
+
+1. **Linearity:** The relationship between the independent variables and the outcome is linear.
+   - **Visual inspection**: Plot the relationship between predictors and outcome.
+   - Consider adding polynomial terms or interaction terms if non-linear patterns are detected.
+
+2. **Independence of Observations:** Each observation is independent of the others (no autocorrelation or spillover effects unless explicitly modeled).
+   - For **time-series or panel data**, use:
+     - Durbin-Watson test (autocorrelation)
+     - Clustered standard errors to account for within-group correlation
+   - Avoid overlapping treatments or spillovers between units.
+
+3. **No Perfect Multicollinearity:** The independent variables are not perfectly correlated.
+   - Check **Variance Inflation Factor (VIF)**: Rule of thumb: VIF > 5–10 → strong multicollinearity
+   - Drop redundant variables or combine them.
+     
+4. **Zero Conditional Mean of Errors:** The error term \( u \) has an expected value of zero given the independent variables:  
+   \(\mathbb{E}[u \mid D, T, D \times T] = 0\)
+   - This is an assumption that **can't be directly tested** — it's a requirement of correct model specification.
+   - Mitigate by:
+     - Including relevant covariates
+     - Avoiding omitted variable bias
+     - Running robustness checks and placebo tests
+
+5. **Homoscedasticity:** The variance of the error term is constant across all values of the independent variables.
+   - Plot residuals vs. fitted values: Look for funnel shapes.
+   - Use tests:
+     - Breusch-Pagan test
+     - White’s test
+
+6. **Normality of Errors:** The error term is normally distributed — especially important for small samples to ensure valid confidence intervals and p-values.
+   - Histogram or Q-Q plot of residuals
+   - Shapiro-Wilk or Kolmogorov-Smirnov test (for small samples)
+   - Note: Less critical with large samples due to Central Limit Theorem.
+
+7. **Parallel Trends Assumption:** In the absence of treatment, the treated and control groups would have experienced the **same change over time** in the outcome.
+   - Plot pre-treatment trends for treated vs. control groups
+   - Run a **“placebo DiD”** using earlier pre-periods only
+   - Add leads and lags of treatment variable in an **event study model** to test for pre-trends
+
+---
 
 ### 1.2 Synthetic Control Method
 _TODO: Add summary and applied notes._

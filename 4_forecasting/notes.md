@@ -13,7 +13,7 @@
 - Seasonality & trend decomposition
 - Moving averages, exponential smoothing
 - Backtesting & forecast evaluation
-
+- Prediction Intervals (Like CI but for forecasting)
 
 ## 🎲 Monte Carlo Simulation
 

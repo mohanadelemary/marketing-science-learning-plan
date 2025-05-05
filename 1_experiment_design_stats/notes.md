@@ -33,27 +33,19 @@
    5.2. [Log-Rank Test](#log-rank-test)  
    5.3. [Cox Regression](#cox-regression)
 
-7. [Control Charts](#control-charts)  ✅   
-
-8. [Design of Experiments (DoE)](#design-of-experiments-doe)  ✅   
-
-9. [Data Structure For Experiment Design & Analysis](#data-structure-for-experiment-design-and-analysis)  ✅   
+7. [Control Charts](#control-charts)  ✅
    
-
-**Further Learning**  ❌  
-
-    - Usual structure/breakdown of data collected for tests and to calculate required size
-    - Understand Parametric vs. non-parametric t-tests  ✅   
-    - Understand test alternatives for non-equal sample size split like Welch's T-test. ✅   
-    - How data should be structured to ingest and run the tests. time-series, user-level, aggregations?
-
-10. [Libraries](#libraries)
+8. [Data Structure For Experiment Design & Analysis](#data-structure-for-experiment-design-and-analysis)  ✅   
+   
+9. [Libraries](#libraries)  ❌  
 - `scipy.stats`
 - `statsmodels.stats.api` (for t-tests, ANOVA, power analysis)
 - `pingouin` (for effect sizes, CI)
 - `bayespy`, `PyMC`, `pymc3` (for Bayesian A/B testing)
 - `GeoLift` (R package; similar analysis can be replicated in Python)
 - `pandas`, `numpy`, `matplotlib`, `seaborn`, `plotly` (for exploratory & visual analysis)
+
+10. Coding Packages  ❌  
 
 11. [Resources](#resources)
 - [ ] Data Tab: Full Lecture on Data Science Statistics https://www.youtube.com/watch?v=K9teElePNkk
@@ -538,54 +530,6 @@ Tracks: Metric over time (e.g. conversion rate, ROAS, defects)
 - Product: Funnel drop-off, error rates
 - Manufacturing: Defect tracking
 - Support: Call durations, wait times
-
----
-
-## Design of Experiments (DoE)
-
-Design of Experiments (DoE) is a structured, statistical approach to **planning tests** that assess the effects of multiple factors (independent variables) on a measurable outcome (dependent variable).
-
-### 🎯 Goals of DoE
-   - Identify **which variables** significantly affect an outcome.
-   - Understand **interactions** between variables.
-   - Optimize performance with minimal testing effort.
-   - Reduce cost and time compared to one-variable-at-a-time testing.
-
-### 🧱 Common DoE Types
-
-   - **Full Factorial Design**
-     - Tests all possible combinations of factors and levels.
-     - Best for small sets of variables.
-     - Allows analysis of main effects and all interactions.
-   
-   - **Fractional Factorial Design**
-     - Uses a **subset of combinations** to reduce test volume.
-     - Assumes some higher-order interactions are negligible.
-     - Efficient for testing 4+ variables.
-   
-   - **2-Level Factorial (2ⁿ)**
-     - Each factor has 2 levels (e.g., low/high).
-     - Ideal for screening key drivers.
-
-### 📏 Related Concepts
-
-- **Power Analysis & Sample Size Estimation**
-  - Estimate how many observations per condition are needed.
-  - Inputs: α (significance), power, MDE, number of groups.
-  - Same fundamentals apply as in A/B testing.
-
-- **Minimum Detectable Effect (MDE)**
-  - Smallest effect size you'd care to detect.
-  - Helps balance precision vs cost.
-
-- **Blocking**
-  - Account for known sources of variation (e.g., day of week).
-  - Improves test precision by isolating uncontrollable noise.
-
-### 🧠 When to Use
-- Multivariate campaign testing (e.g., ad copy × bidding strategy)
-- Budget allocation testing (portfolio × device × match type)
-- Creative optimization across multiple attributes (headline × image × CTA)
 
 ---
 

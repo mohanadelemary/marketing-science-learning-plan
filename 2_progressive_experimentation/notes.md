@@ -69,6 +69,11 @@
    b. Controlled experiments (e.g., random assignment of A, then measure B)
    c. Existence of a strong theoretical framework supporting the direction from A → B
 
+> Note: Correlation alone is not sufficient for causality. You must rule out confounding factors and ensure the relationship isn’t spurious.
+
+![440174565-23c8dfc8-67f0-4211-a088-f18c976a56cd](https://github.com/user-attachments/assets/b137e9f3-9351-47f8-8d51-8c5f6983f771)
+
+
 ## Causal Inference
 
 ### 1.1 Difference-in-Differences (DiD)

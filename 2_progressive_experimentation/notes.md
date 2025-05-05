@@ -59,6 +59,16 @@
 | **CausalImpact**             | Post-treatment deviation from expected trend        | **Bayesian posterior test**      |
 | **Uplift Modeling**          | Differential treatment effect per individual        | **Model-based; may test uplift > 0** |
 
+
+## Causality
+**Conditions to prove Causality:**
+
+- Strong and statistically significant correlation
+- Temporal precedence (cause must come before effect), shown in one of three ways:
+   a. Clear chronological ordering (e.g., variable A occurs before B)
+   b. Controlled experiments (e.g., random assignment of A, then measure B)
+   c. Existence of a strong theoretical framework supporting the direction from A → B
+
 ## Causal Inference
 
 ### 1.1 Difference-in-Differences (DiD)

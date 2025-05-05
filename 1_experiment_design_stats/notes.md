@@ -20,30 +20,32 @@
    3.1. [Minimum Detectable Effect (MDE)](#minimum-detectable-effect-mde)  
    3.2. [Sample Size Formula](#sample-size-formula)  
    3.3. [Trade-offs](#trade-offs)
+   3.4. [Unequal Sample Split Testing](#Unequal-Sample-Split-Testing)
 
-4. [A/B Testing Design](#ab-testing-design)  ✅   
+5. [A/B Testing Design](#ab-testing-design)  ✅   
    4.1. [Frequentist vs Bayesian A/B Testing](#frequentist-vs-bayesian-ab-testing)  
    4.2. [Sequential Testing and FDR Correction](#sequential-testing-and-fdr-correction)  
    4.3. [Confidence vs Credible Intervals](#confidence-vs-credible-intervals)  
    4.4. [Bayesian A/B Testing Concepts](#bayesian-ab-testing-concepts)
 
-5. [Survival Analysis](#survival-analysis)  ✅   
+6. [Survival Analysis](#survival-analysis)  ✅   
    5.1. [Kaplan-Meier Curve](#kaplan-meier-curve)  
    5.2. [Log-Rank Test](#log-rank-test)  
    5.3. [Cox Regression](#cox-regression)
 
-6. [Control Charts](#control-charts)  ✅   
+7. [Control Charts](#control-charts)  ✅   
 
-7. [Design of Experiments (DoE)](#design-of-experiments-doe)    ❌  
+8. [Design of Experiments (DoE)](#design-of-experiments-doe)  ✅   
+
+9. [Data Structure For Experiment Design & Analysis](#data-structure-for-experiment-design-and-analysis)  ✅   
+   
 
 **Further Learning**  ❌  
 
     - Usual structure/breakdown of data collected for tests and to calculate required size
-    - Understand Parametric vs. non-parametric t-tests
-    - Understand test alternatives for non-equal sample size split like Welch's T-test.
+    - Understand Parametric vs. non-parametric t-tests  ✅   
+    - Understand test alternatives for non-equal sample size split like Welch's T-test. ✅   
     - How data should be structured to ingest and run the tests. time-series, user-level, aggregations?
-    - Code for each test? manual coding? prebuilt function on statsmodels or other?
-    - Build code library? Build functions packages for my own work?
 
 10. [Libraries](#libraries)
 - `scipy.stats`
@@ -253,17 +255,81 @@ Power = 1 − 𝛽
 
 **Ensures test is neither underpowered (miss real effects) nor wasteful**
 
+
+### Unequal Sample Split Testing
+
+### 🔄 Unequal Split Testing
+- Allocate traffic unevenly (e.g., 90% A, 10% B) to reduce risk.
+- Requires **larger total sample size** to detect same effect.
+- **Adjusted formula:**  
+
+n = equal_sample_size × ((1 + k) / (4k)), where k = n_A / n_B
+
+- Works with Welch’s t-test for continuous variables or Z-test for proportions, binary outcomes like conversions.
+
 ---
 
 ## A/B Testing Design
 
 ### Frequentist vs Bayesian A/B Testing
 
-_TODO: Add notes_
+   #### Frequentist A/B Testing
+   - Relies on **fixed sample size** and **p-values**.
+   - Null hypothesis (H₀): no difference between A and B.
+   - Reject H₀ if p-value < α (e.g. 0.05).
+   - **Not safe to peek** at results mid-test (peeking inflates Type I error).
+   - Requires pre-calculated sample size via power analysis.
+   - Final decision is binary: _statistically significant_ or not.
+   
+   #### Bayesian A/B Testing
+   - Based on **Bayes’ Theorem**:
+      Posterior ∝ Prior × Likelihood
+   - Outputs **probability distributions** instead of p-values.
+   - Answers intuitive questions like:
+   - “What is the probability B is better than A?”
+   - Allows **continuous monitoring** — no penalty for peeking.
+   - Uses **credible intervals** instead of confidence intervals.
+   - Works well with smaller samples or prior information.
+   
+   #### ⏱ Bayesian Early Stopping
+   - Continuously update posterior as new data arrives.
+   - Common stopping rules:
+   - Stop if `P(B > A) > 0.95` → B is better
+   - Stop if `P(B > A) < 0.05` → B is worse
+   - Optional: use **expected loss** or **regret minimization** to guide decisions.
+   - Safer and more flexible than frequentist stopping; avoids p-hacking.
+   - Avoids p-value hacking; allows for real-time decision making.
+   - Use expected loss or credible intervals as stopping rules.
+   
+   #### When to Use Bayesian
+   - You want **probabilistic interpretation**
+   - Traffic is low or experiments are costly
+   - You want to incorporate **prior knowledge**
+   - You may need **early decisions**
+
 
 ### Sequential Testing and FDR Correction
 
-_TODO: Add notes_
+**Sequential A/B Testing:**
+- Frequentist method to **safely monitor results during a test**.
+- Uses **adjusted thresholds** (e.g., O'Brien-Fleming bounds).
+- Can stop early without inflating Type I error.
+- Common designs:
+   - Group Sequential Testing
+   - Sequential Probability Ratio Test (SPRT)
+
+**FDR Correction (False Discovery Rate) (For multiple experiments, samples and tested metrics)**
+- Used when testing **multiple hypotheses** (e.g., multiple metrics or variants).
+- Controls **expected proportion of false positives** among discoveries.
+- **Benjamini-Hochberg procedure**:
+   1. Sort p-values in ascending order: `p₁, p₂, ..., pₘ`
+   2. Compare each `pᵢ` to:
+      ```
+      (i / m) × Q
+      ```
+      where `i` = rank, `m` = total tests, `Q` = FDR level (e.g. 0.05)
+   3. Largest `pᵢ` passing the threshold → all p-values before it are significant.
+   - Less conservative and more powerful than Bonferroni correction.
 
 ### Confidence vs Credible Intervals
 
@@ -477,8 +543,214 @@ Tracks: Metric over time (e.g. conversion rate, ROAS, defects)
 
 ## Design of Experiments (DoE)
 
-_TODO: Add notes_
-DOE like full factorial and fractional factorial design
-also power analysis and sample size and minimum effect required
+Design of Experiments (DoE) is a structured, statistical approach to **planning tests** that assess the effects of multiple factors (independent variables) on a measurable outcome (dependent variable).
+
+### 🎯 Goals of DoE
+   - Identify **which variables** significantly affect an outcome.
+   - Understand **interactions** between variables.
+   - Optimize performance with minimal testing effort.
+   - Reduce cost and time compared to one-variable-at-a-time testing.
+
+### 🧱 Common DoE Types
+
+   - **Full Factorial Design**
+     - Tests all possible combinations of factors and levels.
+     - Best for small sets of variables.
+     - Allows analysis of main effects and all interactions.
+   
+   - **Fractional Factorial Design**
+     - Uses a **subset of combinations** to reduce test volume.
+     - Assumes some higher-order interactions are negligible.
+     - Efficient for testing 4+ variables.
+   
+   - **2-Level Factorial (2ⁿ)**
+     - Each factor has 2 levels (e.g., low/high).
+     - Ideal for screening key drivers.
+
+### 📏 Related Concepts
+
+- **Power Analysis & Sample Size Estimation**
+  - Estimate how many observations per condition are needed.
+  - Inputs: α (significance), power, MDE, number of groups.
+  - Same fundamentals apply as in A/B testing.
+
+- **Minimum Detectable Effect (MDE)**
+  - Smallest effect size you'd care to detect.
+  - Helps balance precision vs cost.
+
+- **Blocking**
+  - Account for known sources of variation (e.g., day of week).
+  - Improves test precision by isolating uncontrollable noise.
+
+### 🧠 When to Use
+- Multivariate campaign testing (e.g., ad copy × bidding strategy)
+- Budget allocation testing (portfolio × device × match type)
+- Creative optimization across multiple attributes (headline × image × CTA)
+
+---
+
+## Data Structure For Experiment Design and Analysis
+
+#### 📏 Data Breakdown for Sample Size Calculation
+
+- Define:
+  - **Primary KPI** (e.g., CVR, ROAS, CPC)
+  - **Baseline value** (e.g., 5% conversion rate)
+  - **Minimum Detectable Effect (MDE)** (e.g., +1% absolute uplift)
+  - **Significance level (α)** (typically 0.05)
+  - **Power (1 - β)** (typically 0.8)
+- Use formulas or tools to compute **sample size per variant**
+- Important: account for **traffic allocation** if using unequal splits (e.g., 90/10 A/B)
+
+---
+
+#### Data Structure for Running Tests
+
+- **User-level data** (recommended):
+  - Each row = one click/session with:
+    - `user_id`, `campaign_id`, `variant`, `click_date`
+    - outcome variables (converted: 0/1, revenue: €X, spend: €Y)
+  - Enables flexible modeling (t-tests, regression, logistic)
+
+- **Time-series data** (for budget/pacing & trends):
+  - Daily or hourly aggregation:
+    - `date`, `campaign_id`, `variant`, `impressions`, `clicks`, `conversions`, `spend`, `revenue`
+  - Useful for:
+    - Geo experiments
+    - Pre-post analysis
+    - Control matching
+    - Interrupted time-series models
+
+- **Aggregated campaign-level data** (simplified):
+  - Use for reporting & simple z-tests:
+    - Totals per group: impressions, clicks, conversions
+    - Compute CVR, CTR, CPC, ROAS manually
+
+---
+
+#### 🔍 Paid Search-Specific Metrics to Track
+
+- Click-level:
+  - `search_query`, `ad_copy_id`, `keyword_match_type`, `device`, `geo`
+  - `cost`, `cpc`, `quality_score`, `ad_position`, `impression_share`
+
+- Conversion-level:
+  - `conversion_value`, `conversion_category`, `time_to_convert`
+
+- Derived metrics:
+  - CVR = conversions / clicks
+  - ROAS = revenue / spend
+  - AOV = revenue / conversions
+  - CPA = spend / conversions
+
+---
+
+#### 🧠 Best Practices
+
+- ✅ Include `variant` or `experiment_group` assignment explicitly
+- ✅ Randomize users/campaigns *before* the experiment starts
+- ✅ Keep consistent attribution windows (e.g., 7-day post-click)
+- ✅ Avoid filtering mid-test (e.g., removing mobile traffic after launch)
+- ✅ Store both **raw and aggregated** data for flexibility
+- ❌ Don't rely solely on platform UI exports (can be lossy or rounded)
+
+---
+
+#### 📦 Ideal Columns for Paid Search A/B Dataset
+
+| Column              | Type        | Description                            |
+|---------------------|-------------|----------------------------------------|
+| `user_id`           | string/int  | Unique identifier                      |
+| `campaign_id`       | string      | Search campaign name or ID             |
+| `variant`           | string      | A / B / test group                     |
+| `click_date`        | date        | Timestamp of click                     |
+| `converted`         | binary      | 0 or 1 (conversion occurred)           |
+| `conversion_value`  | float       | Revenue if converted                   |
+| `spend`             | float       | Cost of click                          |
+| `device_type`       | category    | Mobile / Desktop / Tablet              |
+| `keyword_match`     | category    | Exact / Phrase / Broad                 |
+
+---
+
+### 📈 Measuring ROAS Across Multiple Portfolios & Campaign Strategies
+
+---
+
+#### 💡 What is ROAS?
+
+\[
+\text{ROAS} = \frac{\text{Revenue}}{\text{Ad Spend}}
+\]
+
+- Higher = more efficient ad spend.
+- Can be measured:
+  - Per **campaign**, **ad group**, or **keyword**
+  - Across **time**, **geo**, or **portfolio**
+
+---
+
+#### 🧠 Why It Gets Tricky
+
+- **Portfolios** may contain different campaign types (brand vs generic, mobile vs desktop).
+- **Spend distribution** is not equal (e.g. 80/20 budget split).
+- ROAS can be influenced by:
+  - Audience targeting
+  - Seasonality
+  - Bid strategies (manual vs tCPA vs max ROAS)
+  - Device/geolocation breakdown
+
+---
+
+#### 📊 Best Practices for Multi-Campaign ROAS Measurement
+
+- ✅ **Normalize** campaign performance:
+  - Use weighted averages:
+    \[
+    \text{Weighted ROAS} = \frac{\sum_i (\text{Revenue}_i)}{\sum_i (\text{Spend}_i)}
+    \]
+  - Don't average ROAS ratios across campaigns (it’s misleading).
+
+- ✅ **Segment ROAS by strategy**:
+  - Manual vs automated bidding
+  - Broad vs exact match keywords
+  - Geo, device, or audience segments
+
+- ✅ **Use regression to adjust for confounders**:
+  - Model:  
+    \[
+    \text{ROAS} = \beta_0 + \beta_1 \cdot \text{Strategy Type} + \beta_2 \cdot \text{Device} + \dots
+    \]
+  - Helps isolate effect of portfolio/bidding strategy on ROAS.
+
+- ✅ **Pre/Post or Matched Control Analysis**:
+  - For strategy changes (e.g. switching from tCPA to MaxROAS), compare:
+    - Pre vs post periods
+    - Treatment vs similar control campaigns
+
+---
+
+#### 📦 Suggested Data Structure
+
+| Column           | Type      | Description                             |
+|------------------|-----------|-----------------------------------------|
+| `campaign_id`    | string    | Unique campaign or portfolio ID         |
+| `strategy_type`  | string    | Manual, tCPA, MaxROAS, etc.             |
+| `date`           | date      | Day-level granularity                   |
+| `spend`          | float     | Ad spend in EUR                         |
+| `revenue`        | float     | Tracked revenue                         |
+| `device`         | category  | Device type                             |
+| `geo`            | category  | Location/country                        |
+
+---
+
+#### 🧪 Recommended Metrics
+
+- ROAS
+- CPA
+- CVR
+- Average Order Value (AOV)
+- Impression Share
+- Click Share
+- Budget utilization
 
 ---

@@ -6,29 +6,30 @@
 
 1. [Causal Inference](#causal-inference)  ❌  
    1.1. [Difference-in-Differences (DiD)](#11-difference-in-differences-did)  
-   1.2. [Synthetic Control Method](#12-synthetic-control-method-) ✅  
+   1.2. [Synthetic Control Method](#12-synthetic-control-method-)
    1.3. [Regression Discontinuity Design (RDD)](#13-regression-discontinuity-design-rdd)  
    1.4. [Instrumental Variables (IV)](#14-instrumental-variables-iv)  
    1.5. [Propensity Score Matching](#15-propensity-score-matching)  
    1.6. [Uplift Modeling](#16-uplift-modeling)  
    1.7. [Causal Diagrams & DAGs](#17-causal-diagrams--dags)  
    1.8. [Bayesian Causal Impact](#18-bayesian-causal-impact)
+   1.9. [4-Cell RCT with holdout cells for incrementality testing](#19-4-cell-rct-with-holdout)
 
-2. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  ❌  
+3. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  ❌  
    2.1. Aggregate Geo-Based A/B Tests  
    2.2. Pre/Post Trends and Control Matching  
    2.3. Applications for Brand/Media Testing  
 
-3. [Regression Models](#regression-models)  ❌  
+4. [Regression Models](#regression-models)  ❌  
    3.1. Simple Linear Regression  
    3.2. Multiple Linear Regression  
    3.3. Logistic Regression  
 
-4. [Choosing & Designing the Right Causal Method](#choosing--designing-the-right-causal-method)  ❌  
+5. [Choosing & Designing the Right Causal Method](#choosing--designing-the-right-causal-method)  ❌  
 
-5. [Design of Experiments (DoE)](#design-of-experiments-doe)  ❌  
+6. [Design of Experiments (DoE)](#design-of-experiments-doe)  ❌  
 
-6. [Libraries](#libraries) ❌  
+7. [Libraries](#libraries) ❌  
    - `statsmodels` (OLS, logistic, fixed effects, DiD)
    - `econml` (CATE estimation, uplift modeling, IVs, meta learners)
    - `DoWhy` (causal graphs, identifiability, backdoor criteria)
@@ -44,6 +45,7 @@
    - [ ] PYMC-Marketing https://www.youtube.com/watch?v=RY-M0tvN77s  
    - [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s
    - [ ] Diff-in-Diff Models https://www.youtube.com/watch?v=w56HI8YxLMQ&t=217s
+   - [ ] Regression Discontinuity Design https://www.youtube.com/watch?v=TzdRl1OnQaw
 
 ---
 
@@ -81,6 +83,10 @@
 - Measures causal effect in one metric among two groups
 - Measures trend in each group pre and post treatment
 - Then determines the difference between those two diff's: +ve or -ve result
+- Critical to Have: Parallel Trends Assumption Pre-Treatment & Non-independent observations (important only if small sample size)
+- Quasi-experimental Design: Uses non-equivalent control group.
+- Usually Paired with techniques like propensity score matching to create a more reliable control group. (QUESTION: when to deem it necessary to apply such technique and not rely on the quasi-control group natural data?)
+  
 y=β 
 0
 
@@ -93,7 +99,8 @@ y=β
  T+β 
 3
 ​
- (D×T)+u
+ (D×T)+u  
+
 **Core Assumptions in Difference-in-Differences (DiD) & How to test for them**
 
 1. **Linearity:** The relationship between the independent variables and the outcome is linear.
@@ -140,10 +147,50 @@ y=β
 _TODO: Add summary and applied notes._
 
 ### 1.3 Regression Discontinuity Design (RDD)
-_TODO: Add theory and implementation tips._
+
+- **What It Is**  
+  A quasi-experimental design that estimates the causal effect of a treatment assigned at a threshold or cutoff in a continuous forcing variable.
+
+- **When to Use**  
+  Use RDD when:
+  - There’s a **continuous assignment variable** (forcing variable).
+  - Treatment is applied only if the variable crosses a **cutoff**.
+  - Units just above and below the cutoff are assumed to be similar (locally randomized).
+
+- **Two Types of RDD:**
+   1. **Sharp RDD:** Treatment assignment is fully determined by the cutoff in the forcing variable.
+      - Example: Students get a scholarship only if their test score ≥ 85.
+      - Interpretation: You’re estimating the jump in the outcome exactly at the cutoff.
+      - Analysis: Local linear regression or polynomial regression on either side.
+
+   2. **Fuzzy RDD:** Probability of receiving treatment increases sharply at the cutoff, but it's not deterministic.
+      - Treatment assignment is not perfectly aligned with the cutoff. (e.g., some just below the threshold still get treated, or some above don't).
+      - Example: A campaign is recommended for funding if score ≥ 85, but the decision is still subject to human review.
+      - Interpretation: The cutoff serves as an **instrumental variable**.
+      - Analysis: Estimate a local average treatment effect (LATE) using 2-stage least squares (2SLS).
+
+
+- **Example (Paid Search Campaigns)**  
+  - A new bidding strategy is triggered for campaigns with ROAS ≥ 2.0.
+  - RDD compares outcomes (e.g. order value or GMV per customer) just above and just below this ROAS threshold.
+  - The goal is to estimate the causal effect of that strategy near the threshold.
+
+- **How to Estimate the Effect**  
+  - Plot outcome vs. forcing variable around the cutoff.
+  - Fit separate regression lines to both sides of the threshold.
+  - The **jump** (discontinuity) at the cutoff estimates the treatment effect.
+  - Use **local linear regression** and bandwidth tuning for precision.
+
+- **Assumptions**  
+  - **Continuity**: The relationship between the forcing variable and outcome is smooth in absence of treatment.
+  - **No manipulation**: Subjects can’t precisely manipulate the forcing variable near the cutoff.
+  - **Local Comparability**: Units near the threshold are comparable in observed and unobserved factors.
+
+---
 
 ### 1.4 Instrumental Variables (IV)
 _TODO: Add assumptions, 2SLS and examples._
+One way to handle confounding variables and endogenous independent variables
 
 ### 1.5 Propensity Score Matching
 _TODO: Add balancing, covariate matching logic._
@@ -158,6 +205,8 @@ _TODO: Add T-Learner, X-Learner, meta-learners._
 
 ### 1.8 Bayesian Causal Impact
 _TODO: Add causal impact implementation and use cases._
+
+### 1.9 4 Cell RCT with Holdout
 
 ## Geo Experiments & Geo Lift Analysis
 
@@ -188,7 +237,11 @@ _TODO: Add use cases like YouTube lift or out-of-home campaigns._
 - Solved via maximum likelihood.
 - Statistical significance tested using Wald’s z-test or chi-squared.
 
-## Choosing & Designing the Right Causal Method
+## Choosing & Designing the Right Causal Method !!!!!!!!!NEEDS CLEANUP!!!!!!
+
+### Notes:
+   - 
+
 
 ### Purpose:
 Explain how to choose between DiD, Bayesian Causal Impact, Geo tests, or regression-based strategies for estimating treatment effects.
@@ -221,6 +274,17 @@ Explain how to choose between DiD, Bayesian Causal Impact, Geo tests, or regress
 | Long time-series pre-intervention      | ✅ Helpful                        | ✅ Essential                         |
 | Need for probabilistic inference       | ❌ No                             | ✅ Yes                               |
 | Simple, low-data setup                 | ✅ Simpler                        | ❌ Requires more modeling            |
+
+
+| Situation                                           | Use A/B Test | Use DiD | Use Geo Test | Use RDD | Use Causal Impact |
+|----------------------------------------------------|--------------|---------|--------------|--------|--------------------|
+| Randomization is possible                          | ✅ Yes       | ❌ No   | ❌ No        | ❌ No | ❌ No              |
+| You have pre/post data + treated & control groups  | ❌ No        | ✅ Yes | ✅ Yes       | ❌ No | ❌ No              |
+| You have only 1 treated group (e.g. one region)    | ❌ No        | ❌ No  | ✅ Yes       | ❌ No | ✅ Yes             |
+| Treatment assigned based on cutoff rule            | ❌ No        | ❌ No  | ❌ No        | ✅ Yes| ❌ No              |
+| Need probabilistic uncertainty                     | ❌ No        | ❌ No  | ❌ No        | ❌ No | ✅ Yes             |
+| Can’t randomize and have no clear control group    | ❌ No        | ❌ No  | ❌ No        | ❌ No | ✅ Yes             |
+
 
 ---
 

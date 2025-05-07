@@ -5,15 +5,15 @@
 ## 📘 Index
 
 1. [Causal Inference](#causal-inference)  ❌  
-   1.1. [Difference-in-Differences (DiD)](#11-difference-in-differences-did)  
-   1.2. [Synthetic Control Method](#12-synthetic-control-method-)
-   1.3. [Regression Discontinuity Design (RDD)](#13-regression-discontinuity-design-rdd)  
-   1.4. [Instrumental Variables (IV)](#14-instrumental-variables-iv)  
-   1.5. [Propensity Score Matching](#15-propensity-score-matching)  
-   1.6. [Uplift Modeling](#16-uplift-modeling)  
-   1.7. [Causal Diagrams & DAGs](#17-causal-diagrams--dags)  
-   1.8. [Bayesian Causal Impact](#18-bayesian-causal-impact)
-   1.9. [4-Cell RCT with holdout cells for incrementality testing](#19-4-cell-rct-with-holdout)
+   1.1. [Difference-in-Differences (DiD)](#11-difference-in-differences-did)  ✅   
+   1.2. [Synthetic Control Method](#12-synthetic-control-method-)  ✅   MAYBE GROUP WITH CI FOR BETTER FLOW
+   1.3. [Regression Discontinuity Design (RDD)](#13-regression-discontinuity-design-rdd)  ✅   
+   1.4. [Instrumental Variables (IV)](#14-instrumental-variables-iv)  ❌  
+   1.5. [Propensity Score Matching](#15-propensity-score-matching)  ✅   
+   1.6. [Uplift Modeling](#16-uplift-modeling)  ❌  
+   1.7. [Causal Diagrams & DAGs](#17-causal-diagrams--dags)  ❌  
+   1.8. [Bayesian Causal Impact](#18-bayesian-causal-impact)  ✅   
+   1.9. [4-Cell RCT with holdout cells for incrementality testing](#19-4-cell-rct-with-holdout)  ❌  
 
 3. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  ❌  
    2.1. Aggregate Geo-Based A/B Tests  
@@ -37,6 +37,7 @@
    - `PyMC`, `pymc3` (Bayesian modeling, priors, posteriors)
    - `scikit-learn` (base regression models, preprocessing)
    - `CausalML` (uplift models: S-learner, T-learner, X-learner)
+   - `pymatch`
 
 8. Coding Packages ❌  
 
@@ -46,6 +47,7 @@
    - [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s
    - [ ] Diff-in-Diff Models https://www.youtube.com/watch?v=w56HI8YxLMQ&t=217s
    - [ ] Regression Discontinuity Design https://www.youtube.com/watch?v=TzdRl1OnQaw
+   - [ ] Causal Impact with Google https://www.youtube.com/watch?v=GTgZfCltMm8&list=PLrEu3Zdeqm1MORDsMxDkIG-8UQobZzXmp
 
 ---
 
@@ -144,7 +146,16 @@ y=β
 ---
 
 ### 1.2 Synthetic Control Method
-_TODO: Add summary and applied notes._
+
+- Used when there’s only **one treated unit** (e.g. one treated city or region) and **multiple potential control units**.
+- Builds a **synthetic control group** by creating a weighted average of untreated units that closely matches the treated unit in the **pre-treatment period**.
+- Allows estimation of the **counterfactual**: what would’ve happened to the treated unit if there were no intervention.
+- **Best for** observational settings where RCTs aren’t possible and you have **long time series data**.
+- Assumes **pre-intervention trends** are good predictors of the post-intervention counterfactual.
+- Better if DiD's parallel trends assumptions doesn't hold.
+- To select control units, Use pearson correlation (r > 0.7), include as many as you can find. P values here is irrelevant since you have autocorrelation anyway because it's a time-series data structure.
+- Optional include covariates, so aside from each city conversions data, maybe ctr, impression share, demographics, pricing and other.
+- Implementation in Python: `causalimpact` or manual using `R`’s `Synth` package logic.
 
 ### 1.3 Regression Discontinuity Design (RDD)
 
@@ -193,7 +204,14 @@ _TODO: Add assumptions, 2SLS and examples._
 One way to handle confounding variables and endogenous independent variables
 
 ### 1.5 Propensity Score Matching
-_TODO: Add balancing, covariate matching logic._
+
+- Used when treatment and control groups **differ in observed characteristics**, meaning no parallel trends pre-treatment, or if no proper control groups were assigned and maintained during the experiment (for example ran experiment on berlin, but other control cities candidates had multiple interventions at the same time, thus diminishing the parallel trend assumptions, then PSM helps us find the cities that could serve best as control groups).
+- Matches each treated unit to similar control unit(s) based on **propensity scores** (probability of receiving treatment given covariates).
+- Reduces **selection bias** and simulates randomization in **observational studies**.
+- Matching methods: 1:1 nearest neighbor, caliper, kernel matching.
+- After matching: analyze treatment effect on matched sample using **t-test, regression, or DiD**.
+- Output: balanced dataset with **comparable treated and control units**. For example: Berlin (Treatment) had PS 0.81 will be matched to control cities with similar score only.
+- Often used before DiD if there are **no parallel trends** due to covariate imbalance.
 
 ### 1.6 Uplift Modeling
 _TODO: Add T-Learner, X-Learner, meta-learners._
@@ -204,9 +222,31 @@ _TODO: Add T-Learner, X-Learner, meta-learners._
 - Tools: `DoWhy`, `dagitty`, `causalnex`
 
 ### 1.8 Bayesian Causal Impact
-_TODO: Add causal impact implementation and use cases._
+
+
+- A time series method for estimating causal effects when only **one treated unit** exists and traditional control groups or RCTs are not feasible.
+- Builds a **Bayesian model** of the treated unit’s pre-treatment behavior to **forecast a counterfactual** (what would’ve happened without treatment).
+- Results are presented as **posterior distributions and credible intervals**, offering intuitive uncertainty estimates.
+
+- ✅ **Can be run using only the treatment group's pre-treatment data** (e.g. one year of daily or weekly data preferred for stability).
+- ✅ Alternatively, it can incorporate **control units' pre- and post-treatment data** to build a stronger **synthetic control**, allowing analysis with a **shorter pre-period** (as little as 30 days).
+- ⚠️ Including covariates (e.g., performance of other cities, traffic, pricing signals) **is optional**, but greatly improves the accuracy of the counterfactual.
+
+- 📈 **Key Advantage over DiD**:
+  - Automatically adjusts for **seasonality**, **trend shifts**, and **external noise** through its **Bayesian time series modeling**.
+  - Handles time-based dependencies more robustly than traditional DiD, especially in the presence of autocorrelation or volatile baselines.
+
+- 🔧 Implementation:
+  - Use `causalimpact` in Python (ported from the original R package).
+  - Internally built on **Bayesian Structural Time Series (BSTS)** modeling.
+
+- 💡 Best used for:
+  - Evaluating **geo-level campaign impact**, retail experiments, or product launches where only **one treated region or time window** exists.
+
 
 ### 1.9 4 Cell RCT with Holdout
+
+---
 
 ## Geo Experiments & Geo Lift Analysis
 
@@ -240,7 +280,45 @@ _TODO: Add use cases like YouTube lift or out-of-home campaigns._
 ## Choosing & Designing the Right Causal Method !!!!!!!!!NEEDS CLEANUP!!!!!!
 
 ### Notes:
-   - 
+   - FLOw
+### Causal Inference Design Flow
+
+### Step 1: Do you have Pre & Post treatment data?
+- ✅ Yes → Consider **Difference-in-Differences (DiD)**
+
+### Step 2: Check DiD Assumptions
+- **Parallel Trends** between treated and control units?
+  - ✅ Yes → Use **DiD**
+  - ❌ No → Proceed to **Propensity Score Matching (PSM)**
+
+### Step 3: After PSM, check again:
+- Do you now have **parallel trends** after balancing?
+  - ✅ Yes → Use **DiD with matched data**
+  - ❌ No → Use **Bayesian Causal Impact** (CI)
+
+---
+
+### Why CI?
+- Accounts for **seasonality** and **noise** better than DiD
+- Builds a robust counterfactual using **synthetic control**
+- Honestly still better option than PSM.
+
+---
+
+## Setting Up Synthetic Control for CI
+
+1. **Select control units (e.g. cities)**:
+   - Use **Pearson correlation ≥ 0.7** on pre-treatment time series  
+   - Choose **as many controls as possible**
+
+2. **Ensure control cities had no other interventions** during test period
+
+3. _(Optional)_ Run regression on pre-treatment period:
+   - Check how well each city predicts treatment (e.g. Berlin)
+   - Use **MSE or RMSE** as diagnostic metric
+
+4. Perform **visual inspection** of time series similarity in pre-period
+
 
 
 ### Purpose:

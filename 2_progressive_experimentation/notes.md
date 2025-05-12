@@ -16,28 +16,28 @@
    1.7. [Propensity Score Matching (PSM)](#17-propensity-score-matching-psm)   
 
    **Causal Machine Learning**  
-   1.8. [Uplift Modeling](#18-uplift-modeling)  
-   1.9. [Bayesian Causal Impact](#19-bayesian-causal-impact)  
+   1.8. [Bayesian Causal Impact](#18-bayesian-causal-impact)  
+   1.9. [Uplift Modeling](#19-uplift-modeling)  
 
    **Experiment Design**  
    1.10. [4-Cell RCT with Holdout Cells for Incrementality Testing](#110-4-cell-rct-with-holdout-cells-for-incrementality-testing)  
 
 
-2. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  ❌  
+3. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  ❌  
    2.1. Aggregate Geo-Based A/B Tests  
    2.2. Pre/Post Trends and Control Matching  
    2.3. Applications for Brand/Media Testing  
 
-3. [Regression Models](#regression-models)  ❌  
+4. [Regression Models](#regression-models)  ❌  
    3.1. Simple Linear Regression  
    3.2. Multiple Linear Regression  
    3.3. Logistic Regression  
 
-4. [Choosing & Designing the Right Causal Method](#choosing--designing-the-right-causal-method)  ❌  
+5. [Choosing & Designing the Right Causal Method](#choosing--designing-the-right-causal-method)  ❌  
 
-5. [Design of Experiments (DoE)](#design-of-experiments-doe)  ❌  
+6. [Design of Experiments (DoE)](#design-of-experiments-doe)  ❌  
 
-6. [Libraries](#libraries) ❌  
+7. [Libraries](#libraries) ❌  
    - `statsmodels` (OLS, logistic, fixed effects, DiD)
    - `econml` (CATE estimation, uplift modeling, IVs, meta learners)
    - `DoWhy` (causal graphs, identifiability, backdoor criteria)
@@ -48,9 +48,9 @@
    - `CausalML` (uplift models: S-learner, T-learner, X-learner)
    - `pymatch`
 
-7. Coding Packages ❌  
+8. Coding Packages ❌  
 
-8. [Resources](#resources)  ❌  
+9. [Resources](#resources)  ❌  
 
    - [ ] PYMC-Marketing https://www.youtube.com/watch?v=RY-M0tvN77s  
    - [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s
@@ -390,7 +390,30 @@ y=β
 
 ---
 
-### 1.8 Uplift Modeling
+### 1.8 Bayesian Causal Impact
+
+- A time series method for estimating causal effects when only **one treated unit** exists and traditional control groups or RCTs are not feasible.
+- Builds a **Bayesian model** of the treated unit’s pre-treatment behavior to **forecast a counterfactual** (what would’ve happened without treatment).
+- Results are presented as **posterior distributions and credible intervals**, offering intuitive uncertainty estimates.
+
+- ✅ **Can be run using only the treatment group's pre-treatment data** (e.g. one year of daily or weekly data preferred for stability).
+- ✅ Alternatively, it can incorporate **control units' pre- and post-treatment data** to build a stronger **synthetic control**, allowing analysis with a **shorter pre-period** (as little as 30 days).
+- ⚠️ Including covariates (e.g., performance of other cities, traffic, pricing signals) **is optional**, but greatly improves the accuracy of the counterfactual.
+
+- 📈 **Key Advantage over DiD**:
+  - Automatically adjusts for **seasonality**, **trend shifts**, and **external noise** through its **Bayesian time series modeling**.
+  - Handles time-based dependencies more robustly than traditional DiD, especially in the presence of autocorrelation or volatile baselines.
+
+- 🔧 Implementation:
+  - Use `causalimpact` in Python (ported from the original R package).
+  - Internally built on **Bayesian Structural Time Series (BSTS)** modeling.
+
+- 💡 Best used for:
+  - Evaluating **geo-level campaign impact**, retail experiments, or product launches where only **one treated region or time window** exists.
+
+---
+
+### 1.9 Uplift Modeling
 
 Uplift modeling (a.k.a. incrementality modeling or CATE estimation) predicts the **individual-level effect** of a treatment (e.g. ad, email) on an outcome (e.g. purchase), rather than just the outcome itself.
 
@@ -532,28 +555,6 @@ It helps marketing teams make **causal, cost-effective** decisions at the **user
 
 ---
 
-### 1.9 Bayesian Causal Impact
-
-- A time series method for estimating causal effects when only **one treated unit** exists and traditional control groups or RCTs are not feasible.
-- Builds a **Bayesian model** of the treated unit’s pre-treatment behavior to **forecast a counterfactual** (what would’ve happened without treatment).
-- Results are presented as **posterior distributions and credible intervals**, offering intuitive uncertainty estimates.
-
-- ✅ **Can be run using only the treatment group's pre-treatment data** (e.g. one year of daily or weekly data preferred for stability).
-- ✅ Alternatively, it can incorporate **control units' pre- and post-treatment data** to build a stronger **synthetic control**, allowing analysis with a **shorter pre-period** (as little as 30 days).
-- ⚠️ Including covariates (e.g., performance of other cities, traffic, pricing signals) **is optional**, but greatly improves the accuracy of the counterfactual.
-
-- 📈 **Key Advantage over DiD**:
-  - Automatically adjusts for **seasonality**, **trend shifts**, and **external noise** through its **Bayesian time series modeling**.
-  - Handles time-based dependencies more robustly than traditional DiD, especially in the presence of autocorrelation or volatile baselines.
-
-- 🔧 Implementation:
-  - Use `causalimpact` in Python (ported from the original R package).
-  - Internally built on **Bayesian Structural Time Series (BSTS)** modeling.
-
-- 💡 Best used for:
-  - Evaluating **geo-level campaign impact**, retail experiments, or product launches where only **one treated region or time window** exists.
-
----
 
 ### 1.10 4-Cell RCT with Holdout Cells for Incrementality Testing
 

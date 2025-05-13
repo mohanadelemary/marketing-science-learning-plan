@@ -820,7 +820,7 @@ Design of Experiments (DoE) is a structured, statistical approach to **planning 
 
 ---
 
-## 7. libraries  
+## 6. libraries  
 
    **7.1 General Regression-Based Causal Inference**
       - `statsmodels`

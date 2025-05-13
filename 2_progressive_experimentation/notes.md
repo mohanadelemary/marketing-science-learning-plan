@@ -29,15 +29,15 @@
 
 3. [Choosing & Designing the Right Causal Method](#3-choosing--designing-the-right-causal-method)  ✅  
 
-4. [Example Analyses for Paid Search & How to Do Them](#4-example-analyses-for-paid-search-&-how-to-do-them)  ✅  
+4. [Example Analyses for Paid Search & How to Do Them](#4-example-analyses-for-paid-search--how-to-do-them)  ✅  
 
-5. [Design of Experiments (DoE)](#design-of-experiments-doe)  ✅  
+5. [Design of Experiments (DoE)](#5-design-of-experiments-doe)  ✅  
 
-7. [Libraries](#libraries) ❌  
+6. [Libraries](#6-libraries)  ✅  
 
-8. Coding Packages ❌  
+7. Coding Packages ❌  
 
-9. [Resources](#resources)  ❌  
+8. [Resources](#resources)  ❌  
 
    - [ ] PYMC-Marketing https://www.youtube.com/watch?v=RY-M0tvN77s  
    - [ ] Bayesian Marketing Science https://www.youtube.com/watch?v=5QgiixYjmTM&t=1320s

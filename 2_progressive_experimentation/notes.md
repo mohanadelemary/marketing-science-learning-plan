@@ -4,7 +4,7 @@
 
 ## 📘 Index
 
-1. [Causal Inference](#causal-inference) ✅  
+1. [Causal Inference](#1-causal-inference)  ✅  
    1.1. [Causal Diagrams & DAGs](#11-causal-diagrams--dags)  
    1.2. [Handling Confounders in Regression on Observational Data](#12-handling-confounders-in-regression-on-observational-data)  
 
@@ -19,34 +19,21 @@
    1.8. [Bayesian Causal Impact](#18-bayesian-causal-impact)  
    1.9. [Uplift Modeling](#19-uplift-modeling)  
 
-   **Experiment Design**  
+   **Other Experiment Design**  
    1.10. [4-Cell RCT with Holdout Cells for Incrementality Testing](#110-4-cell-rct-with-holdout-cells-for-incrementality-testing)  
 
+2. [Regression Models](#2-regression-models)  ✅  
+   2.1. Simple Linear Regression  
+   2.2. Multiple Linear Regression  
+   2.3. Logistic Regression  
 
-3. [Geo Experiments & Geo Lift Analysis](#geo-experiments--geo-lift-analysis)  ❌  
-   2.1. Aggregate Geo-Based A/B Tests  
-   2.2. Pre/Post Trends and Control Matching  
-   2.3. Applications for Brand/Media Testing  
+3. [Choosing & Designing the Right Causal Method](#3-choosing--designing-the-right-causal-method)  ✅  
 
-4. [Regression Models](#regression-models)  ❌  
-   3.1. Simple Linear Regression  
-   3.2. Multiple Linear Regression  
-   3.3. Logistic Regression  
+4. [Example Analyses for Paid Search & How to Do Them](#4-example-analyses-for-paid-search-&-how-to-do-them)  ✅  
 
-5. [Choosing & Designing the Right Causal Method](#choosing--designing-the-right-causal-method)  ❌  
-
-6. [Design of Experiments (DoE)](#design-of-experiments-doe)  ❌  
+5. [Design of Experiments (DoE)](#design-of-experiments-doe)  ✅  
 
 7. [Libraries](#libraries) ❌  
-   - `statsmodels` (OLS, logistic, fixed effects, DiD)
-   - `econml` (CATE estimation, uplift modeling, IVs, meta learners)
-   - `DoWhy` (causal graphs, identifiability, backdoor criteria)
-   - `causalimpact` (Bayesian time series intervention model, ported from R to Python)
-   - `PyMC`, `pymc3` (Bayesian modeling, priors, posteriors)
-   - `scikit-learn` (base regression models, preprocessing)
-   - `sciki-uplift` (uplift models)
-   - `CausalML` (uplift models: S-learner, T-learner, X-learner)
-   - `pymatch`
 
 8. Coding Packages ❌  
 
@@ -590,128 +577,202 @@ It helps marketing teams make **causal, cost-effective** decisions at the **user
    - To estimate the **true causal effect**, compare Group 1 vs. Group 2.  
    - To detect **measurement bias**, compare Group 2 vs. Group 4.
    
-   
+---
+
+## 2. Regression Models
+
+### 2.1 Simple Linear Regression
+- Predicts a **continuous outcome** based on one independent variable.
+- Fits a line that **minimizes Mean Squared Error (MSE)**.
+- Assumes:
+  - **Linearity**: Relationship between X and Y is linear
+  - **Independence**: Observations are independent
+  - **Homoscedasticity**: Constant variance of errors
+  - **Normality**: Errors are normally distributed
+- Common metrics:
+  - Coefficient of determination (**R²**): proportion of variance explained
+  - **Standard Error**: measures spread of residuals
+  - **t-test**: used to test significance of slope coefficient
+
+---
+
+### 2.2 Multiple Linear Regression
+- Predicts a continuous outcome from **two or more predictors**.
+- Same assumptions as simple regression, plus:
+  - **No multicollinearity**: predictors shouldn’t be too highly correlated
+    - Check using **Variance Inflation Factor (VIF)** and **Tolerance**
+- Coefficients:
+  - **Unstandardized**: raw units (e.g., € per click)
+  - **Standardized**: unitless, comparable across predictors
+- Model evaluation:
+  - **R² / Adjusted R²**: adjusted accounts for number of predictors
+  - **F-test**: tests if the model explains a significant portion of the variance
+- Use **dummy variables** for categorical features:
+  - Drop one level as a baseline to avoid the dummy variable trap
+
+---
+
+### 2.3 Logistic Regression
+- Used for **binary classification problems** (e.g., conversion: yes/no)
+- Models the **probability** of success using a **sigmoid (logit) function**
+- Unlike linear regression, it uses:
+  - **Maximum Likelihood Estimation (MLE)** instead of least squares
+- Output:
+  - **Odds ratio** for interpretation of coefficients
+  - **Log loss** as an evaluation metric
+- Assumptions:
+  - Linearity in the **log odds**, not in Y itself
+  - Independence of observations
+  - No multicollinearity
+- Inference:
+  - **Wald’s z-test** and **Likelihood-Ratio (Chi-squared) test** used to assess predictor significance
+- Extensions:
+  - **Multinomial Logistic Regression**: for 3+ outcome classes
+  - **Regularized Logistic Regression**: includes L1 (Lasso) or L2 (Ridge) penalties
+
+---
+
+## 3. Choosing & Designing the Right Causal Method
+
+### 🎯 Goal
+
+Estimate the **causal effect** of a treatment (e.g., ad campaign, feature change) on an outcome (e.g., conversions, revenue), using the **best method for your data and experimental setup**.
+
+Avoid:
+- Confounding bias
+- Selection bias
+- Time-based noise (seasonality, trend shifts)
+- Misinterpretation of correlation as causation
 
 
-## Geo Experiments & Geo Lift Analysis
 
-### 2.1 Aggregate Geo-Based A/B Tests
-_TODO: Add methodology summary._
+### 🧭 Core Causal Method Flow: DiD → PSM → Causal Impact
 
-### 2.2 Pre/Post Trends and Control Matching
-_TODO: Add design examples and metrics._
+#### Step 1: Do You Have Pre & Post Treatment Data?
+- ✅ Yes → Start with **Difference-in-Differences (DiD)**
 
-### 2.3 Applications for Brand/Media Testing
-_TODO: Add use cases like YouTube lift or out-of-home campaigns._
-
-## Regression Models
-
-### 3.1 Simple Linear Regression
-- Minimizes MSE.
-- Assumes linearity, normality of errors, independence, homoscedasticity.
-
-### 3.2 Multiple Linear Regression
-- Adds assumption: no multicollinearity.
-- Check with VIF and tolerance.
-- Includes standardized vs unstandardized coefficients.
-- R², adjusted R², standard error.
-- Use dummy variables for categorical features (drop one as baseline).
-
-### 3.3 Logistic Regression
-- Binary classification via sigmoid function.
-- Solved via maximum likelihood.
-- Statistical significance tested using Wald’s z-test or chi-squared.
-
-## Choosing & Designing the Right Causal Method !!!!!!!!!NEEDS CLEANUP!!!!!!
-
-### Notes:
-   - FLOw
-### Causal Inference Design Flow
-
-### Step 1: Do you have Pre & Post treatment data?
-- ✅ Yes → Consider **Difference-in-Differences (DiD)**
-
-### Step 2: Check DiD Assumptions
-- **Parallel Trends** between treated and control units?
+#### Step 2: Check Pre-Treatment Trends
+- Do treated and control units have **parallel trends** before the intervention?
   - ✅ Yes → Use **DiD**
-  - ❌ No → Proceed to **Propensity Score Matching (PSM)**
+  - ❌ No → Apply **Propensity Score Matching (PSM)** to rebalance covariates
 
-### Step 3: After PSM, check again:
-- Do you now have **parallel trends** after balancing?
-  - ✅ Yes → Use **DiD with matched data**
-  - ❌ No → Use **Bayesian Causal Impact** (CI)
-
----
-
-### Why CI?
-- Accounts for **seasonality** and **noise** better than DiD
-- Builds a robust counterfactual using **synthetic control**
-- Honestly still better option than PSM.
-
----
-
-## Setting Up Synthetic Control for CI
-
-1. **Select control units (e.g. cities)**:
-   - Use **Pearson correlation ≥ 0.7** on pre-treatment time series  
-   - Choose **as many controls as possible**
-
-2. **Ensure control cities had no other interventions** during test period
-
-3. _(Optional)_ Run regression on pre-treatment period:
-   - Check how well each city predicts treatment (e.g. Berlin)
-   - Use **MSE or RMSE** as diagnostic metric
-
-4. Perform **visual inspection** of time series similarity in pre-period
+#### Step 3: After PSM, Check Again
+- Do you now have **balanced pre-trends**?
+  - ✅ Yes → Use **DiD on matched sample**
+  - ❌ No → Use **Bayesian Causal Impact** or **Synthetic Control**
 
 
+#### 🔁 Summary of Flow
+Pre/Post Data → DiD → Trends Misaligned → PSM → Still Misaligned? → Bayesian Causal Impact / Synthetic Control
 
-### Purpose:
-Explain how to choose between DiD, Bayesian Causal Impact, Geo tests, or regression-based strategies for estimating treatment effects.
+### 🧠 When to Use Each Method
 
-### Start with the Goal
-- Estimate the **causal effect** of a treatment (e.g., campaign, feature) on an outcome (e.g., conversions, ROAS).
-- Avoid bias from confounding, seasonality, or selection effects.
+#### ✅ Difference-in-Differences (DiD)
+- **Use when**: Treated + control groups with parallel pre-trends
+- **Pros**: Simple, robust if assumptions hold
+- **Cons**: Fails if trends are not parallel
 
-### Difference-in-Differences (DiD)
-- **Use Case**: You have both treated and untreated groups over time.
-- **Assumptions**:
-  - Parallel trends between groups.
-  - No spillovers or interference.
-- **Strengths**: Simple design, good with panel data.
-- **Weaknesses**: Sensitive to assumption violations, requires control group.
+#### ✅ Propensity Score Matching (PSM)
+- **Use when**: Treated/control groups differ in covariates
+- **Goal**: Match units to simulate randomization before applying DiD
 
-### Bayesian Causal Impact
-- **Use Case**: One treated unit, time series with multiple pre-period predictors.
-- **Mechanism**: Builds a pre-treatment model, forecasts counterfactual, compares actual to predicted.
-- **Assumptions**: Stable pre-period relationship between outcome and predictors.
-- **Strengths**: Uncertainty quantification, no need for control group.
-- **Weaknesses**: Requires solid control variables; prior handling is critical.
+#### ✅ Bayesian Causal Impact (CI)
+- **Use when**: You have **only 1 treated unit** or can't meet DiD assumptions
+- **Mechanism**: Forecasts counterfactual using **Bayesian time-series model**
+- **Pros**: Adjusts for seasonality, trends, and noise
+- **Cons**: Requires solid pre-period and predictive control variables
 
-### When to Use Which
+### 🧪 Uplift Modeling: When to Include It?
 
-| Situation                              | Use DiD                           | Use Bayesian Causal Impact           |
-|----------------------------------------|-----------------------------------|--------------------------------------|
-| Treated and control group available    | ✅ Yes                            | ❌ Not ideal                         |
-| Only one treated unit (e.g., 1 geo)    | ❌ No                             | ✅ Yes                               |
-| Long time-series pre-intervention      | ✅ Helpful                        | ✅ Essential                         |
-| Need for probabilistic inference       | ❌ No                             | ✅ Yes                               |
-| Simple, low-data setup                 | ✅ Simpler                        | ❌ Requires more modeling            |
+| Role in causal analysis         | Not used to measure overall treatment effect |
+|----------------------------------|----------------------------------------------|
+| Used for                         | **Optimizing individual targeting**          |
+| Requires                         | RCT / A/B test (user- or geo-level)          |
+| Measures                         | **Incremental effect per individual or segment** |
+| Output                           | "Who will respond positively to treatment"   |
+| Analysis level                   | Micro (user-level), not macro                |
+
+**Use it when:**
+- You already ran an A/B test or geo experiment  
+- You want to **target future campaigns more efficiently**  
+- You care about **incremental ROAS at the user level**, not just overall lift
 
 
-| Situation                                           | Use A/B Test | Use DiD | Use Geo Test | Use RDD | Use Causal Impact |
-|----------------------------------------------------|--------------|---------|--------------|--------|--------------------|
-| Randomization is possible                          | ✅ Yes       | ❌ No   | ❌ No        | ❌ No | ❌ No              |
-| You have pre/post data + treated & control groups  | ❌ No        | ✅ Yes | ✅ Yes       | ❌ No | ❌ No              |
-| You have only 1 treated group (e.g. one region)    | ❌ No        | ❌ No  | ✅ Yes       | ❌ No | ✅ Yes             |
-| Treatment assigned based on cutoff rule            | ❌ No        | ❌ No  | ❌ No        | ✅ Yes| ❌ No              |
-| Need probabilistic uncertainty                     | ❌ No        | ❌ No  | ❌ No        | ❌ No | ✅ Yes             |
-| Can’t randomize and have no clear control group    | ❌ No        | ❌ No  | ❌ No        | ❌ No | ✅ Yes             |
+### 🧠 Method Selector: Comparison Table
 
+| Scenario                                     | DiD | PSM + DiD | Bayesian CI | RDD | Uplift Modeling |
+|----------------------------------------------|-----|------------|-------------|-----|------------------|
+| Treated & control groups available           | ✅  | ✅         | ❌          | ❌  | ✅ (post-test)   |
+| Control group not parallel pre-treatment     | ❌  | ✅         | ✅          | ❌  | ✅ (if RCT)      |
+| Only one treated unit (e.g. geo)             | ❌  | ❌         | ✅          | ❌  | ❌               |
+| Pre/post time series exists                  | ✅  | ✅         | ✅          | ❌  | ❌               |
+| Randomized treatment (A/B or geo test)       | ✅  | ✅         | ✅          | ❌  | ✅               |
+| Treatment assigned by threshold              | ❌  | ❌         | ❌          | ✅  | ❌               |
+| Need to model individual treatment effects   | ❌  | ❌         | ❌          | ❌  | ✅               |
+| Need uncertainty/credible intervals          | ❌  | ❌         | ✅          | ❌  | ❌               |
 
 ---
 
-## Design of Experiments (DoE)
+#### 🧪 Experiment Design → Data Structure → Method Template
+
+| Step                        | Questions to Ask                                  | Leads To                              |
+|-----------------------------|----------------------------------------------------|----------------------------------------|
+| **Design**                  | Can I randomize treatment?                         | Yes → A/B or Geo test                 |
+|                             | No → Use observational methods                     |                                        |
+| **Data Structure**          | Do I have pre/post panel data?                     | Yes → Try DiD                         |
+|                             | Is control imbalanced or not parallel?             | Use PSM or move to Causal Impact      |
+|                             | Only 1 treated unit?                               | Use Bayesian Causal Impact            |
+|                             | Treatment threshold rule?                          | Use RDD                               |
+| **Output Needs**            | Do I need user-level predictions?                  | Use Uplift Modeling (with A/B design) |
+|                             | Want overall campaign lift + confidence intervals? | Use Bayesian CI                       |
+|                             | Want interpretable effect on metric Y?            | Use DiD or regression                 |
+
+
+#### 🧠 CI vs Uplift — Key Distinction
+
+| Metric                     | Causal Impact             | Uplift Modeling                        |
+|----------------------------|---------------------------|----------------------------------------|
+| Level of analysis          | Macro (geo, campaign)     | Micro (user or segment)                |
+| Output                     | Total lift over time      | Incremental effect per user            |
+| Use case                   | Did the campaign work?    | Who should we target next time?        |
+| Needs experimental design? | Not strictly              | ✅ Must be RCT                          |
+| Needs long pre-period?     | ✅ Yes                    | ❌ No (just post-experiment data)       |
+
+---
+
+### 4. Example Analyses for Paid Search & How to Do Them
+
+| Analysis Goal                                               | Example Question                                                                 | Method(s) to Use                         | Notes                                                                                   |
+|-------------------------------------------------------------|----------------------------------------------------------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------|
+| Measure impact of branded search spend                      | Do branded keywords actually drive incremental bookings?                         | Geo A/B Test + DiD or Causal Impact       | Run geo holdout; analyze post-period booking deltas or use CI with untreated cities     |
+| Estimate incremental ROAS from search campaigns             | Is our branded campaign delivering >1.5x ROAS incrementally?                     | Causal Impact or Geo Test + ROAS calc     | Include ad spend and revenue; CI gives credible intervals for effect                    |
+| Optimize who sees branded ads                               | Which users should see our branded ads to maximize efficiency?                   | Uplift Modeling (T-learner, X-learner)    | Requires RCT; use to segment future users by expected uplift                            |
+| Evaluate effectiveness of new bidding strategy              | Did switching to a new bidding algorithm improve bookings or ROAS?               | DiD or Causal Impact                      | Use control group on old bidding strategy; ensure pre-period trends are parallel        |
+| Quantify lift from a promo extension in ads                 | Did including “10% off” in search ads increase conversions?                      | A/B Test or Geo Test + DiD                | Split regions or campaigns; compare conversion rates and value                          |
+| Diagnose campaign saturation or waste                       | Are we overspending on users who would convert anyway?                           | Uplift Modeling + ROAS Threshold Filtering| Predict incremental ROAS; suppress low or negative uplift users                         |
+| Justify spend on awareness/upper funnel keywords            | Do generic search terms lead to eventual bookings in exposed markets?            | Geo Test + Causal Impact                  | Use long attribution windows; CI captures delayed lift                                  |
+| Analyze cannibalization between paid and organic            | If we pause branded search, do users book anyway via organic?                    | Geo A/B Test + DiD or CI                  | Requires careful measurement of both paid and organic traffic during test               |
+| Forecast post-campaign booking drop-off                     | What happens when we turn off branded campaigns?                                 | Causal Impact (time series forecasting)   | Predict counterfactual; compare actual drop-off vs. forecasted baseline                 |
+| Estimate effect of spend level change (e.g. +20%)           | What’s the causal effect of increasing branded search budget in top cities?      | Instrumental Variable (if spend endogenous) or Geo Split + DiD | Use IV only if randomization is infeasible and you have valid instruments              |
+
+#### 📊 Essential Non-Causal Analyses for Paid Search Optimization
+
+| Analysis Goal                                           | Example Question                                                             | Method(s) to Use                       | Notes                                                                 |
+|---------------------------------------------------------|------------------------------------------------------------------------------|----------------------------------------|-----------------------------------------------------------------------|
+| Optimize Quality Score                                  | What are the key drivers of Quality Score drops across branded campaigns?   | Multiple Linear Regression             | Use CTR, Ad Relevance, Landing Page Experience as predictors         |
+| Improve cost-efficiency across segments                 | Which campaigns or geos deliver high CPC but low ROAS?                      | Aggregated ROAS & CPA benchmarks       | Regularly refresh dashboards and flag underperformers                 |
+| Understand bid landscape behavior                       | How does CPC behave when impression share or budget changes?                | Bid Landscape Analysis + Correlation   | Use daily/weekly time series to find thresholds or diminishing returns|
+| Forecast performance based on budget scenarios          | What will happen if we cut or increase branded budget by 20%?               | Scenario Forecasting (linear or logistic) | Use historical data to model nonlinear spend-to-revenue behavior    |
+| Track and attribute upper-funnel keyword contribution   | Do generic search terms indirectly lead to conversions later?               | Assisted Conversion Tracking / Path Analysis | Use Google Analytics, GA4, or attribution models                     |
+| Optimize ad text performance                            | Which headline or description variations have the best CTR or CR?           | A/B Testing + CTR/CR comparisons       | Use ad variations at ad group level with sufficient volume            |
+| Segment campaign performance by audience/device         | How do branded campaigns perform differently on mobile vs. desktop?         | Segmentation Analysis + Pivoting       | Use GA and ad platform segmentation filters                           |
+| Identify seasonality or cyclicality in branded search   | When does branded traffic spike or dip across markets?                      | Time Series Decomposition              | Use STL or moving averages to isolate trend, seasonality, and noise  |
+| Correlate branded demand with external factors          | Do holidays, events, or weather impact search volume and conversion?        | External Data Join + Correlation       | Use calendar or 3rd-party datasets and blend with search trends       |
+| Benchmark GYG against competitors on branded terms      | Are competitors consistently bidding on our branded keywords?               | Auction Insights + Share of Voice      | Review impression share, overlap rate, and position vs. competition   |
+
+---
+
+## 5. Design of Experiments (DoE)
 
 Design of Experiments (DoE) is a structured, statistical approach to **planning tests** that assess the effects of multiple factors (independent variables) on a measurable outcome (dependent variable).
 
@@ -759,5 +820,85 @@ Design of Experiments (DoE) is a structured, statistical approach to **planning 
 
 ---
 
+## 7. libraries  
+
+   **7.1 General Regression-Based Causal Inference**
+      - `statsmodels`
+        - OLS, logistic regression, DiD, fixed effects
+        - Covers most classical regression-based causal techniques
+      
+      - `linearmodels`
+        - Advanced panel data support (fixed/random effects, IV, DiD variants)
+        - Better than `statsmodels` for complex panel setups
 
 
+
+   **7.2 Uplift Modelling, Meta-Learners & CATE Estimation**
+        - `econml` (by Microsoft)
+        - Meta-learners: S-, T-, X-, R-, DR-Learner
+        - Supports uplift modeling, IVs, and doubly robust estimation
+        - Causal forest, orthogonal random forests, confidence intervals
+        - Best for user-level treatment effect estimation
+      
+      - `CausalML` (by Uber)
+        - T-, S-, X-learners
+        - Supports uplift scoring, causal forest, XGBoost + CATE
+        - Easier than `econml` for quick uplift tasks
+      
+      - `scikit-learn`
+        - Not causal-specific, but used as a base for learners in `econml`, `causalml`, and uplift modeling pipelines
+
+      - `scikit-uplift`
+        - Uplift random forest, uplift trees
+        - Evaluation tools: Qini curves, uplift@K, AUUC
+        - Great for clean, purpose-built uplift modeling
+      
+      - `upliftml`
+        - Simpler uplift tree models with fast implementation
+        - Good lightweight alternative
+
+   **7.3 Time Series Causal Inference**
+      - `causalimpact`
+        - Bayesian structural time series for estimating causal effect of interventions
+        - Ported from Google’s R package to Python
+        - Ideal for single treated unit with long pre-period (e.g. one geo)
+      
+      - `prophet`
+        - Not causal-specific, but useful for creating pre-period forecasts (e.g. to manually approximate counterfactuals)
+
+   **7.4 Causal Graphs & Identifiability**
+      - `DoWhy`
+        - DAG creation and causal reasoning using structural assumptions
+        - Supports identifiability, backdoor/IV criteria, and refutation
+        - Integrates with `econml` for estimation
+      
+      - `causalnex`
+        - DAG-based learning from data
+        - Bayesian Network-based structure modeling
+        - Focus on business decision modeling, not just identifiability
+
+      - `dagitty` (web tool)
+        - Browser-based DAG editor and backdoor identification
+        - Not a Python lib, but crucial in causal workflow
+
+   **7.5 Matching & Propensity Scores**
+      - `pymatch`
+        - Simple API for propensity score matching
+        - Can do nearest-neighbor matching, caliper, diagnostics
+        - Great for balancing observational data before DiD
+      
+      - `causalml` and `DoWhy`
+        - Also support PSM internally (no need for `pymatch` alone)
+
+   **7.6 Bayesian Modeling (Advanced)**
+      - `PyMC` / `pymc3` / `pymc`
+        - Probabilistic programming for full Bayesian modeling
+        - Use when you want posterior distributions, custom priors, or full probabilistic causal analysis
+        - Can be used for Bayesian IVs, Bayesian regression, or custom synthetic controls
+      
+      - `bambi`
+        - High-level wrapper around PyMC for Bayesian regression (like `statsmodels` but Bayesian)
+        - Useful for rapid prototyping of Bayesian GLMs
+
+
+---

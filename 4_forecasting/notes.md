@@ -785,6 +785,11 @@ Each simulation gives a possible outcome. After many runs:
 - Use **LSTM/NNs** for large, nonlinear, multivariate datasets
 - Always match the model to your **data structure and business needs**
 
+> **Footnote:** While Prophet is excellent for forecasting with seasonality and external regressors, models like **XGBoost or other gradient-boosted regressors** offer additional flexibility:
+> - **Custom Thresholds**: They can directly incorporate business rules or thresholds (like minimum incremental ROAS) into the modeling process, ensuring predictions align with strategic business goals.
+> - **Optimization**: They allow for fine-tuning and optimization based on custom performance metrics, making them powerful for scenarios where meeting specific thresholds is crucial.
+> - **Non-linear Relationships**: They excel at capturing complex, non-linear relationships between variables, which can provide more accurate and actionable insights for marketing spend optimization.
+
 ---
 ### 4.10 Tools & Libraries
 - `statsmodels.tsa`: ARIMA, decomposition, ETS

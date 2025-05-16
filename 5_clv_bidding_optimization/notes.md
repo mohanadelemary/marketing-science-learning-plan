@@ -57,10 +57,14 @@ We start with **Customer Lifetime Value**:
 - Others book €800 worth of tours over 3 cities  
 
 You train a model that looks at early signals:
-- Device, destination, keyword type, time of day, past booking behavior  
+- Device, destination, keyword type, time of day, entry funnel, user cohort
 - And says: _this person will likely be worth €250 in the next 6 months_
 
-Now we’re not bidding blindly — we’re bidding for **value**
+You also **segment users into behavioral cohorts**:
+- High-frequency travelers, gift buyers, family planners, last-minute tourists  
+- Each segment gets its own CLV profile
+
+Now we’re not bidding blindly — we’re bidding for **value**, and we know which cohorts to prioritize.
 
 ---
 
@@ -73,9 +77,8 @@ A logistic regression or XGBoost gives you:
 **P(conversion | click context)**
 
 Now you combine both:
-```
-Predicted Value = P(Conversion) × Predicted CLV
-```
+   Predicted Value = P(Conversion) × Predicted CLV
+
 
 You just built **value-per-click**.
 
@@ -97,59 +100,84 @@ That’s real **incrementality-aware bidding**.
 
 ---
 
-#### 🔹 Step 4: Budget Optimization
+#### 🔹 Step 4: Integrate Attribution + Bid Elasticity
 
-Now, you have predicted value per user, per campaign.
+Now you look across the full journey:
+
+- A user clicks a Paid Social ad, then converts via Paid Search. Who gets credit?
+- Another user bounces from a generic search term but converts on brand later. Was the first click wasted?
+
+You apply **multi-touch attribution** and **Marketing Mix Modeling (MMM)** to calibrate credit allocation:
+- Paid Search gets only **partial credit** when it wasn’t the first touchpoint
+
+You also train a **bid elasticity model**:
+- Predict how responsive each keyword or audience is to bid increases
+- Combine with value-per-click to spend where marginal return is highest
+
+Now you're optimizing *incremental value per marginal euro*.
+
+---
+
+#### 🔹 Step 5: Budget Optimization Under Constraints
+
+You now have predicted value per user, campaign, and keyword.
 
 But you still have **constraints**:
 - €500K monthly budget  
 - ROAS target of 2.5  
-- Some destinations need more love than others
+- Brand visibility goals in top destinations
 
 You turn this into a math problem:
-> How do I allocate money across campaigns so I maximize total expected revenue under constraints?
+> How do I allocate money across campaigns to maximize expected profit *without breaking constraints*?
 
 You use:
-- **Linear programming** (`cvxpy`) to allocate across campaigns  
-- Or portfolio-style optimization to balance **return vs. risk**
+- **Linear programming** (`cvxpy`) or  
+- **Risk-aware portfolio optimization** (like mean-variance optimization)  
+- Penalize allocations to high-volatility campaigns
 
-This is **Budget Allocation Under Constraints**.
-
----
-
-#### 🔹 Step 5: Forecasting the Future
-
-Now we ask:  
-> “What will happen if we follow this plan?”
-
-You use **Prophet** or **ARIMA** to forecast:
-- Expected conversions, revenue, ROAS  
-- Uncertainty ranges (best/worst case)
-
-You show the plan to leadership:  
-> “We expect €3.2M revenue next month. With 90% confidence, it’ll be between €2.9M and €3.6M.”
-
-You now speak the language of **business planning**.
+This is **constrained optimization with business rules**.
 
 ---
 
-#### 🔹 Step 6: Monitoring, Automation, and Reacting
+#### 🔹 Step 6: Forecast the Future — and Account for Uncertainty
+
+You forecast outcomes of your budget plan:
+- How much revenue will this allocation generate?
+- What’s the upside/downside?
+
+You use:
+- **Prophet**, **ARIMA**, or **Bayesian structural time series**
+- **Monte Carlo simulations** to model risk and range of outcomes
+
+Example:  
+> “We expect €3.2M revenue next month. 90% of simulations land between €2.8M and €3.6M.”
+
+You're speaking the language of **business planning**, not just performance metrics.
+
+---
+
+#### 🔹 Step 7: Monitoring, Automation, and Learning Loops
 
 The market shifts daily.
 
 - ROAS tanks in Italy?  
-  → **Pause spend or lower bids**  
-- CLV changes in branded search?  
-  → **Trigger retraining**  
-- New campaign launched?  
-  → **Reoptimize allocation**
+  → **Trigger alerts + lower bids**  
+- CLV drops in branded search?  
+  → **Retrain CLV model**  
+- New competitor enters?  
+  → **Re-estimate bid elasticity**
 
-This is where **automation** kicks in:
-- Dashboards alert on key metrics  
+You automate:
+- Dashboards with anomaly detection  
 - Model retraining pipelines (Airflow, Prefect)  
-- Bid rules and budget updates are triggered dynamically
+- Scheduled bid adjustments via API or scripts
 
-You’ve built a **living system** — not a one-time report.
+You also track:
+- Model drift (via SHAP/Evidently)  
+- Attribution shifts  
+- Feedback from post-click behavior (via UX data)
+
+This is no longer a set-it-and-forget-it model — it’s a **living, learning system**.
 
 ---
 
@@ -163,21 +191,40 @@ You now ask:
 > “Are we spending where we drive real, incremental bookings?”  
 > “Are we growing long-term value, not just this week’s ROAS?”
 
-You’ve turned Paid Search into a **predictive, causal, and value-maximizing engine**.
+You’ve turned Paid Search into a **predictive, causal, risk-aware marketing engine**.
 
 ---
 
 ## 🔁 Recap: What You’ve Built
 
-| Layer                         | Tool / Method                        | Purpose                                 |
-|------------------------------|--------------------------------------|-----------------------------------------|
-| Predict CLV                  | `lifetimes`, XGBoost                 | Long-term customer value                |
-| Predict conversion + ROAS   | Logistic regression, regressors      | Value per click                         |
-| Uplift modeling              | CausalML, EconML                     | Incrementality-aware targeting          |
-| Budget optimization          | `cvxpy`, `scipy.optimize`            | Maximize returns under constraints      |
-| Forecast outcomes            | Prophet, ARIMA, Monte Carlo          | Plan and communicate future results     |
-| Automation & triggers        | Dashboards, job schedulers, alerts   | Keep system responsive + adaptive       |
+| Layer                         | Tool / Method                          | Purpose                                 |
+|------------------------------|----------------------------------------|-----------------------------------------|
+| Predict CLV                  | `lifetimes`, XGBoost, cohort models    | Long-term customer value                |
+| Predict conversion + ROAS   | Logistic regression, XGBoost           | Value per click                         |
+| Uplift modeling              | CausalML, EconML                       | Incrementality-aware targeting          |
+| Multi-touch Attribution + MMM| Bayesian MMM, Gradient Boost models    | Better credit across channels           |
+| Bid Elasticity Modeling      | XGBoost, counterfactual simulation     | Bid sensitivity and marginal return     |
+| Budget Optimization          | `cvxpy`, risk-adjusted allocation      | Maximize return under constraints       |
+| Forecasting + Risk Analysis  | Prophet, ARIMA, Monte Carlo            | Predict revenue & account for uncertainty|
+| Automation & Monitoring      | Airflow, Prefect, SHAP, Dashboards     | Maintain and adapt the system           |
 
+---
+
+## 🧭 System Flow Overview
+
+```mermaid
+flowchart TD
+    A[Raw Data: Clicks, Bids, Conversions] --> B[CLV Modeling]
+    A --> C[Conversion Prediction]
+    B & C --> D[Value-per-Click Calculation]
+    D --> E[Uplift Modeling - Incrementality]
+    E --> F[Multi-Touch Attribution + MMM]
+    F --> G[Bid Elasticity Modeling]
+    G --> H[Constrained Budget Optimization]
+    H --> I[Forecasting & Monte Carlo Simulations]
+    I --> J[Automation & Monitoring Layer]
+    J --> K[Feedback Loop for Model Retraining]
+```
 ---
 
 ## ✅ Your Role Now
@@ -188,6 +235,8 @@ You’re not just reporting on campaign performance — you’re designing the *
 - Allocates budget with strategic precision  
 - Forecasts growth  
 - And adapts in real-time
+
+Welcome to the smart growth engine at GetYourGuide.
 
 ---
 ### let’s sum it all up in a nutshell:

@@ -16,7 +16,6 @@ Goal: Accurately predict key performance indicators and identify trends, seasona
 - [4.9 When to Use What?](#410-when-to-use-what?)  
 - [4.10 Tools & Libraries](#49-tools--libraries)
   
-- 4.11 Notes, Summaries & Resources
 ---
 
 ### 4.1 Time-Series Fundamentals

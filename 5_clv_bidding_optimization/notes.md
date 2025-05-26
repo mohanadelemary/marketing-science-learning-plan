@@ -12,6 +12,8 @@
 4. [Toolkits & Libraries](#54-toolkits--libraries)
 5. [Putting It All Together](#55-putting-it-all-together)
    - [Automation & Trigger Logic](#551-automation--trigger-logic)
+  
+Interesting Read: https://towardsdatascience.com/how-to-calculate-the-elasticity-of-bids-in-ppc-marketing-1a989c0b46cd/
 
 ---
 

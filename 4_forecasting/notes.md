@@ -13,9 +13,9 @@ Goal: Accurately predict key performance indicators and identify trends, seasona
 - [4.6 Forecast Evaluation & Backtesting](#46-forecast-evaluation--backtesting)  
 - [4.7 Prediction Intervals](#47-prediction-intervals)  
 - [4.8 Monte Carlo Simulation for Forecasting](#48-monte-carlo-simulation-for-forecasting)
-- [4.9 When to Use What?](#410-when-to-use-what?)  
-- [4.10 Tools & Libraries](#49-tools--libraries)
-  
+- [4.9 When to Use What?](#49-when-to-use-what?)  
+- [4.10 Tools & Libraries](#410-tools--libraries)
+- [4.11 AI Tools for Forecasting, Anomaly Detection and Computer Vision Analysis]- (#411-ai-tools-for-forecasting-anomaly-detection-and-computer-vision-analysis)
 ---
 
 ### 4.1 Time-Series Fundamentals
@@ -800,3 +800,18 @@ Each simulation gives a possible outcome. After many runs:
 - `plotly`, `matplotlib`, `seaborn`: For visualizing forecasts
 
 ---
+
+### 4.11 AI Tools for Forecasting, Anomaly Detection and Computer Vision Analysis
+
+**Ad Performance & Creative Optimization**
+- **Anomaly Detection**
+    - Time-series outlier detection, Change point detection in marketing data (`PyOD`, `Prophet`, `TensorFlow Anomaly Detection`)
+- **Audience Segmentation & Personalization**
+    - Clustering (K-Means, DBSCAN, Gaussian Mixture Models, Hierarchical Clustering), Look-Alike Modeling (`scikit-learn`, `HDBSCAN`, `LightFM`, `Surprise`)
+- **NLP for Sentiment Analysis**
+    - Analyzing customer feedback & engagement (`spaCy`, `Transformers`)
+- **Computer Vision for Ad Performance**
+    - Analyzing ad creatives (`OpenCV`, `DeepCTR`)
+
+---
+

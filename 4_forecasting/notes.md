@@ -14,8 +14,8 @@ Goal: Accurately predict key performance indicators and identify trends, seasona
 - [4.7 Prediction Intervals](#47-prediction-intervals)  
 - [4.8 Monte Carlo Simulation for Forecasting](#48-monte-carlo-simulation-for-forecasting)
 - [4.9 When to Use What?](#49-when-to-use-what?)  
-- [4.10 Tools & Libraries](#410-tools--libraries)
-- [4.11 AI Tools for Forecasting, Anomaly Detection and Computer Vision Analysis]- (#411-ai-tools-for-forecasting-anomaly-detection-and-computer-vision-analysis)
+- [4.10 Tools & Libraries](#410-tools--libraries)  
+- [4.11 AI Tools for Forecasting, Anomaly Detection and Computer Vision Analysis](#411-ai-tools-for-forecasting-anomaly-detection-and-computer-vision-analysis)   
 ---
 
 ### 4.1 Time-Series Fundamentals
